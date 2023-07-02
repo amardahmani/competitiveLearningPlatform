@@ -1,0 +1,260 @@
+Cas d'utilisation: Participer à un challenge 
+
+Type: Principal
+Acteur: Développeur
+Objectifs: permets aux développeur de rejoindre un challenge, résoudre des questions et gagner des points.
+Pré-conditions: S'authentifier,consulter liste des challenges.
+
+S.N: 
+1- Le développeur clique sur participer.
+2- Le système lui retourne un formulaire.
+3- Le développeur soummit le formulaire.
+4- Le système vérifie le formulaire.
+5- le système enregistre le formulaire.
+6- Le système envoie un message de succées au développeur.
+7- le système affiche la liste des questions.
+8- Le développeur choisit une question.
+9- Le système affiche les détails de la question.
+10- le développeur soummit sa solution.
+
+
+S.A:
+
+4.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+4.2- Le système affiche formulaire participation.
+4.3- Le développeur soummit la solution.
+
+
+Si type question est algorithmique:
+
+10.1.1- Le système exécute la solution.
+10.1.2- Le système enregistre la solution.
+10.1.2- Le système affiche un message de succées et le score gagné par le développeur.
+
+type question est hackathon:
+
+10.2.1- Le système enregistre la solution.
+10.2.2- Le système envoie en message de succées aux développeur.
+
+
+S.E:
+
+SI évenement est terminé
+1- Le développeur clique sur participer.
+1.2- Le système affiche un message d'erreur.
+
+10.1.1- Le système exécute la solution.
+10.1.1.1- Le système retourne un message d'erreur.
+
+
+Si durée du challenge est terminée: 
+10.1.le développeur soummit sa solution.
+10.2. le système retourne un message d'erreur.
+
+
+Post-conditions:
+Solution enregistrée, score attribué.
+
+
+3################################""
+
+Cas d'utilisation: Créer un challenge job.
+Type: principal
+Acteur Principal: Récruteur
+Acteur Secondaire: Développeur
+Objectifs: récruter un développeur.
+Pré-conditions: S'authentifier.
+
+S.N: 
+	1- Le récruteur clique sur gérer offres d'emploi.
+	2- Le système affiche la liste des offres.
+	3- Le récruteur clique sur créer une offre.
+	4- Le système affiche un formulaire.
+	5- Le récruteur soummit le formulaire.
+	6- Le système vérifie le formulaire.
+	7- Le système enregistre le formulaire.
+	8- Le système affiche formulaire pour créer une question.
+	9- Le récruteur soummit le formulaire.
+	10- le Système traite le formulaire.
+	11- Le système affiche un message de succées.
+	12- Le récruteur soummit touts.
+	13- le système enregistre les questions.
+	14- le système affiche un message de succées.
+15- Le récruteur clique sur consulter résultats.
+16- Le système affiche la liste des gagnats.
+17- Le récruteur appel un candidat.
+18- Le système notifie le développeur.
+19- Le développeur répond au récruter.
+20- Le système affiche un écran de discussion.
+21- Le récruteur termine la discussion.
+
+
+S.A: 
+
+6.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+6.2- Le système affiche formulaire participation.
+6.3- Le récruteur soummit le formulaire.
+
+8.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+8.2- Le système affiche formulaire participation.
+8.3- Le récruteur soummit le formulaire.
+
+
+S.E:
+19.1- le développeur ne réponds pas.
+19.2- le système envoie appel réfusé comme message.
+
+
+Post-conditions:
+Entretien fait, candidat choisit.
+
+Cas d'utilisation: Créer un challenge
+Type: Principal
+Acteur: Instructeur
+Objectifs: creation du challenge.
+Pré-conditions: S'authentifier.
+
+S.N:
+1- L'instructeur clique sur créer un challenge.
+2- Le système affiche un formulaire de création.
+3- L'instructeur soummit le formulaire(titre,description,durée,type).
+4- Le système vérifie le formulaire.
+5- le système affiche un formulaire.
+6- L'instructeur soummit le challenge.
+7- Le système enregistre le challenge.
+8- le système retourne un message de succées.
+
+S.A:
+4.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+4.2- Le système affiche formulaire participation.
+4.3- L'instructeur soummit la solution.
+
+SI: type = hackathon
+5.1.1- L'instructeur soummit le formulaire(titre,description,entrées,sorties,score,difficulté).
+5.1.2- Le système vérifie le formulaire.
+5.1.2- le syème enregistre la question.
+5.1.3- Le système affiche la liste des question
+
+
+5.2.1- L'instructeur soummit le formulaire(titre,problématique).
+5.2.2- Le système vérifie le formulaire.
+5.2.2- le syème enregistre la question.
+5.2.3- Le système affiche la liste des themes.
+
+5.1.2.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+5.1.2.2- Le système affiche formulaire participation.
+5.1.2.3- L'instructeur soummit la solution.
+
+5.2.2.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+5.2.2.2- Le système affiche formulaire participation.
+5.2.2.3- L'instructeur soummit la solution.
+
+
+
+Post-conditions: Challenge enregistré.
+
+
+Cas d'utilisation: Planifier un challenge.
+Type: Principal
+Acteur: Administrateur.
+Objectifs: challenge est planifé, le challenge sera affiché pour les développeurs.
+Pré-conditions: S'authentifier.
+
+S.N: 
+1- L'Administrateur clique sur planifier challenges.
+2- Le système affiche un calendrier.
+3- L'administrateur clique sur ajouter un challenge.
+4- Le système affiche un formulaire avec la date du début et un select avec la liste des challenges.
+5- Le développeur soummit le formulaire.
+6- Le système vérifie le formulaire.
+7- Le système enregistre l'évenement.
+8- Le système affiche l'évenement dans le calendrier.
+
+
+
+S.A:
+Si la date de début du challenge est similaire à un autre.
+
+4.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+4.2- Le système affiche formulaire participation.
+4.3- L'instructeur soummit la solution.
+
+
+Post-conditions: challenge est activé.
+
+Cas d'utilisation: S'authentifier
+Acteur: Administrateur, Développeur, Instructeur, Analyste, Récruteur
+Type: Principal
+Pré-conditions: /
+Objectifs: Utilisateur authentifié
+S.N:
+
+1- l'utilisateur clique sur s'authentifier.
+2- Le système affiche un champs d'authentification.
+3- L'utilisateur remplit et soummit les champs.
+4- Le système vérifie le champs.
+5- Le système affiche une page de vérification.
+6- L'utilisateur entre le code de vérification.
+7- Le système vérifie le code.
+8- Le système authentifie l'utilisateur.
+9- Le système affiche la page d'accueil.
+
+S.A:
+4.1- Le système vérifie le formulaire et trouve qu'il est invalide.
+4.2- Le système affiche un formulaire.
+4.3- L'utilisateur remplit et soummit le formulaire.
+
+
+7.1- Le système vérifie le code et trouve qu'il est invalide.
+7.2- Le système affiche un formulaire.
+7.3- L'utilisateur remplit et soummit le formulaire.
+
+
+
+S.E:
+
+Si nombre d'essais arrive à  trois:
+4.2- Le système ferme la session.
+6.2-Le système ferme la session.
+
+Post-conditions: session crée.
+
+
+envoyer sms vers l'utilisateur.
+
+formulaire = champs d'authentification.
+
+mot de passe incorrect.
+pas de code plus de
+home page.
+
+Une erreur plus de trois fois veuillew ré-essayer.
+
+on écrit A1 pour l'alternatif.
+
+utilisateur est authentificatié et il est dans sa page d'accueil.
+
+t.q :
+la planification est un peu spécifique.
+
+planifier.
+
+Notifier la personne qui a crée le challenge.
+
+Setting: les instructeur, exo,solution.
+
+LA Baque des challenges.
+Affectation des jurys.
+
+//Si la challenge a besoin des jurys l'admin ajoute des jurys pour le challenge.
+
+challenge est crée,administrateur notifié.
+
+
+	Si la connextion est perdue, challenge n'est pas encore démarré.
+	Solution incorrect.
+	
+	
+	
+	
+	points

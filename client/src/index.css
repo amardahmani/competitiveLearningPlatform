@@ -1,0 +1,45 @@
+html,
+#root,
+body,
+.app,
+.content {
+  height: 100%;
+  width: 100%;
+  font-family: "Source Sans Pro", sans-serif;
+  background: #11456c;
+  background-image: url('assets/pattern-png-30769.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+}
+
+.app {
+  display: flex;
+  flex-direction: row;  
+  position: relative;
+  background-color: #e6f4ff;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
