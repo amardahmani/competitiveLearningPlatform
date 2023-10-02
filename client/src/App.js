@@ -38,7 +38,7 @@ import Competition from './pages/Developer/views/Competition';
 import ChallengeManagementInstructor from './pages/Instructor/views/ChallengeManagement';
 import RequireAuth from './components/auth/RequireAuth';
 import AuthForm from './components/auth/AuthForm';
-
+import { ToastContainer } from 'react-toastify';
 
 
 
@@ -95,10 +95,20 @@ function App () {
           </Route>
           
         </Route>
+        <Route
+        path="/recruiter" 
+        element={<RequireAuth allowedRole="RECRUITER"/>}>
+          <Route path="/recruiter/" element={<RecruiterBoard />}>
+          <Route path="/recruiter/challenge" element={<ChallengeManagementRecruiter />} />
+          <Route path="/recruiter/challenge/:challengeID" element={<ChallengeDetail />}/>
+          <Route path="/recruiter/jobs" element={<JobManagement />} />
+          <Route path="/recruiter/jobs/:jobID" element={<JobDetail />} />
+          </Route>
+          
+        </Route>
         
       </Routes>
-  
-    </>
+      </>
   );
 }
 

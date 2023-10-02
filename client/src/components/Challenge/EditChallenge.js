@@ -1,7 +1,7 @@
-import { Box } from '@mui/material'
+import { Box, Button, Card, CardContent, Divider, TextField, Typography } from '@mui/material'
 import React from 'react'
 import { useDropzone } from 'react-dropzone';
-
+import EditIcon from '@mui/icons-material/Edit';
 const editorConfig = {
     placeholder: 'Enter your description here',
     toolbar: [
@@ -92,7 +92,7 @@ const EditChallenge = (props) => {
             ) : (
               <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
                 <Typography>{acceptedFiles[0].name}</Typography>
-                <EditOutlinedIcon />
+                <EditIcon />
               </Box>
             )}
           </Box>

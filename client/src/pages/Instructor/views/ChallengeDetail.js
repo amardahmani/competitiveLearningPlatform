@@ -8,15 +8,18 @@ import { getChallenge, getChallengeQuestions, getInstructors, getNonInstructors,
 import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
 import Instructors from '../../../components/tables/Instructors'
 import AddInstructorDialog from '../../../components/users/AddInstructorDialog'
+import EditChallenge from '../../../components/Challenge/EditChallenge'
+import QuestionLibrary from '../../../components/questions/algorithmic/QuestionLibrary'
 const ChallengeDetail = (props) => {
 
   const [openCreate,setOpenCreate] = useState(false);
   const [questions,setQuestions] = useState([]);
   const [open,setOpen] = useState(false);
+  const [openLibrary,setOpenLibrary] = useState(false);
   const [instructors, setInstructors] = useState([]);
   const [savedInstructors, setSavedInstructors] = useState([]);
   const params = useParams();
-  console.log(params);
+  const challengeID = params.challengeID;
   useEffect(() => {
     const fetchData = async () => {
       try{
@@ -27,7 +30,7 @@ const ChallengeDetail = (props) => {
         const savedInstructors = savedInstructorsResponse.data;
         const questionsResponse = await getChallengeQuestions(params.challengeID);
         const questions = questionsResponse.data;
-        setQuestions(questions);
+        setQuestions(questions.algorithmicQuestions);
         setInstructors(nonInstructors);
         setSavedInstructors(savedInstructors);
       }catch(err){
@@ -36,9 +39,11 @@ const ChallengeDetail = (props) => {
     };
     fetchData()
   },[])
-  const {algorithmicQuestions} = questions;
-  console.log(algorithmicQuestions)
+  
 
+  const removeQuestion = (id) => {
+
+  }
 
   const handleSubmit = (values) => {
     const formData = new FormData();
@@ -52,9 +57,17 @@ const ChallengeDetail = (props) => {
 
   const handleOpen = () => {
     setOpen(true);
-  }
+  } 
   const handleClose = () => {
     setOpen(false);
+  }
+
+  const handleOpenLibrary = () => {
+    setOpenLibrary(true);
+  }
+
+  const handleCloseLibrary = () => {
+    setOpenLibrary(false);
   }
   const handleSave = (instructor) => {
     const instructorId = instructor._id;
@@ -72,7 +85,7 @@ const ChallengeDetail = (props) => {
   }
 
   const handleDelete = (instructor) => {
-    const challengeID = params.challengeID;
+    
     const instructorId = instructor._id;
   
     removeInstructor(challengeID, instructorId)
@@ -91,6 +104,12 @@ const ChallengeDetail = (props) => {
       setInstructors((prevInstructors) => [...prevInstructors, instructor]);
 
   };
+
+  const pushAlgorithmicQuestion = (algorithmicQuestions,problem) => {
+    setQuestions([...algorithmicQuestions, problem]);
+  }
+
+
   const handleOpenCreate = () => {
     setOpenCreate(true);
   }
@@ -101,13 +120,25 @@ const ChallengeDetail = (props) => {
         <Box sx={{display:'flex',flexDirection:'column'}}>
         
         <Card variant="outlined" sx={{width:"90%",margin:"10px auto"}}>
+        <Box display="flex">
         <Button variant='contained' onClick={handleOpen}
         sx={{marginTop:"10px",marginLeft:"10px"}}
         >Create new question</Button>
+        <Typography variant='h3' sx={{marginTop:"10px",marginLeft:"10px"}}>or</Typography>
+        <Button variant='outlined'
+        sx={{marginTop:"10px",marginLeft:"10px"}} onClick={handleOpenLibrary}>import question</Button>
+        </Box>
+        <QuestionLibrary 
+        open={openLibrary}
+        handleCloseLibrary={handleCloseLibrary}
+        challengeID={challengeID}
+        algorithmicQuestions={questions}
+        pushAlgorithmicQuestion={pushAlgorithmicQuestion}
+        />
         <CreateAlgorithmic 
         handleSubmit={handleSubmit}
         open={open} handleClose={handleClose} 
-        algorithmicQuestions={algorithmicQuestions}/>
+        algorithmicQuestions={questions}/>
         <CardContent>
           <Typography variant="h3" textAlign='center' mt={1}>List Questions</Typography>
           <Box
@@ -118,9 +149,10 @@ const ChallengeDetail = (props) => {
               },
             }}
           >
-              <ListAlgorithmic challengeID={params.challengeID} 
-              algorithmicQuestions={algorithmicQuestions}
-              handleSubmit={handleSubmit}
+            
+              <ListAlgorithmic 
+              algorithmicQuestions={questions}
+              
               />
 
           </Box>
@@ -143,7 +175,9 @@ const ChallengeDetail = (props) => {
             />
         </Card>
         
-
+        <Box sx={{width:"91%",margin:"10px auto"}}>
+            <EditChallenge />
+        </Box>
         
         </Box>
   )

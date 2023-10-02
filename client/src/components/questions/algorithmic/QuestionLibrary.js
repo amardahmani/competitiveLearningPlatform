@@ -1,22 +1,10 @@
 import { Box, Dialog, DialogContent,Select ,DialogTitle, Modal, TextField,Button, InputLabel, Typography, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, FormControl, MenuItem, Link } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
-import * as yup from 'yup';
-import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import Dropzone from "react-dropzone";
-import { Formik } from 'formik';
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import FlexBetween from '../../../lib/displays/FlexBetween';
-import UpdateIcon from '@mui/icons-material/Update';
-import DeleteIcon from '@mui/icons-material/Delete';
+
 import { createAlgorithmic, getAllAlgorithmic } from '../../../services/questions.service';
-import { getCurrentUser } from '../../../services/auth.service';
-import { useParams } from 'react-router-dom';
-import MyUploadAdapter from '../../../utils/MyUploadAdapter';
-import FormControlContext from '@mui/material/FormControl/FormControlContext';
-import { pushQuestion } from '../../../services/questions.service';
+
 const QuestionLibrary = (props) => {
-    const {open,handleCloseLibrary,algorithmicQuestions,challengeID} = props;
+    const {open,handleCloseLibrary,algorithmicQuestions,addAlgorithmicQuestion,eventID,pushAlgorithmicQuestion} = props;
   
     const [problems,setProblems] = useState([]);
     
@@ -40,14 +28,14 @@ const QuestionLibrary = (props) => {
   
     const handleSubmit = () => {
       const formData = new FormData();
-      formData.append('challengeID',challengeID);
-      formData.append('problem',selectedProblem);
-  
+      
+      formData.append('questionID',selectedProblem);
+      
       const problem = problems.find((problem) => problem._id === selectedProblem);
-  
-      pushQuestion(formData).then((response) => {
+      
+      pushAlgorithmicQuestion(eventID,formData).then((response) => {
         console.log(response.data);
-        algorithmicQuestions.push(problem);
+        addAlgorithmicQuestion(algorithmicQuestions,problem);
         handleCloseLibrary();
       }).catch((err) => {
         console.log(err.message);

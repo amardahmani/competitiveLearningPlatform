@@ -62,8 +62,8 @@ export const pushInstructor = (challengeID, instructorID) => {
   });
 };
 
-export const removeInstructor = (pathID, instructorID) => {
-  return axios.delete(API_URL+'/'+pathID+'/delete/'+instructorID,{
+export const removeInstructor = (challengeID, instructorID) => {
+  return axios.delete(API_URL+'/'+challengeID+'/delete/'+instructorID,{
     headers: {
       'Content-Type': 'application/json',
     }

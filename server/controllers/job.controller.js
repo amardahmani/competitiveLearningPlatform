@@ -1,6 +1,7 @@
 import Job from "../models/job.model.js";
 import Algorithmic from "../models/algorithmic.model.js";
 import Plannification from "../models/plannification.model.js";
+import User from "../models/user.model.js";
 
 export const createJob = async (req, res) => {
     try {
@@ -50,9 +51,7 @@ export const createJob = async (req, res) => {
       res.status(500).json({ message: 'Server error' });
     }
   };
-  export const getJobProblems = (req,res) => {
-    
-  }
+  
 
   export const deleteJob = async (req, res) => {
     try {
@@ -88,21 +87,29 @@ export const createJob = async (req, res) => {
   }
 
   export const pushAlgorithmicJob = async (req,res) => {
-    try{
-        const {jobID,problem} = req.body;
-        console.log(jobID);
+
+      const {jobID} = req.params;
+      const {questionID} = req.body;
+      
+      try{
         const job = await Job.findOne({_id:jobID});
-    
+        const algorithmic = await Algorithmic.findOne({_id:questionID});  
         if(!job){
-            res.status(404).send({message:"job not found"});
+          res.status(404).send({message:"job not found"});
         }
-        job.algorithmicQuestions.push(problem);
+    
+        if(!algorithmic){
+          res.status(404).send({message:"algorithmic question not found"});
+        }
+    
+        job.algorithmicQuestions.push(algorithmic);
         await job.save();
-            res.status(201).send({message:"question saved successfully",job});
+        res.status(200).send({message:"algorithmic question added successfully"});
       }catch(err){
-        res.status(500).send({message:err.message})
+        res.status(500).send({message:err.message});
       }
-  }
+    }
+  
 
 
   export const getJobsPlanned = async (req,res) => {
@@ -156,7 +163,7 @@ export const createJob = async (req, res) => {
         return res.status(404).send({ message: 'Job not found' });
       }
   
-      res.status(200).send(updatedJob);
+      res.status(200).send({job:updateJob,message:"Job Updated Successfully"});
     } catch (err) {
       res.status(500).send({ message: err.message });
     }

@@ -32,12 +32,42 @@ export const deleteJob = (jobID) => {
     return axios.delete(API_URL+'/'+jobID);
 }
 
-export const pushAlgorithmicJob = (data) => {
-    return axios.post(API_URL+'/questions',data,{headers:{
+export const pushAlgorithmicJob = (jobID,data) => {
+    return axios.post(API_URL+'/'+jobID+'/questions',data,{headers:{
         'Content-Type': 'application/json',
     }});
 }
 
 export const getJobAlgorithmicProblems = (jobID) => {
-    return axios.get(API_URL+'/questions/'+jobID);
+    return axios.get(API_URL+'/'+jobID+'/questions/');
 }
+
+export const getJobInstructors = (jobID) => {
+    return axios.get(API_URL+'/'+jobID+'/instructors');
+}
+
+export const updateJob = (jobID,job) => {
+  return axios.put(API_URL+'/'+jobID,job,{headers:{
+    'Content-Type': 'application/json',
+}})
+}
+
+export const getJobNonInstructors = (jobID) => {
+    return axios.get(API_URL+'/'+jobID+'/Noninstructors');
+}
+
+export const pushInstructor = (challengeID, instructorID) => {
+    return axios.post(API_URL + '/' + challengeID + '/add', { instructorId: instructorID }, {
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+  };
+  
+  export const removeInstructor = (jobID, instructorID) => {
+    return axios.delete(API_URL+'/'+jobID+'/delete/'+instructorID,{
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+  };

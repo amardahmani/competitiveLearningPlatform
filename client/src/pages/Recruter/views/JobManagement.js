@@ -33,8 +33,8 @@ const JobManagement = () => {
     },[])
   return (
     <Box>
-        <Button onClick={handleOpen} variant='outlined' sx={{marginLeft:"20px"}}>new Job offer</Button>
-        <CreateJob open={open} handleClose={handleClose} jobs={jobs}/>
+        <Button onClick={handleOpen} variant='contained' sx={{marginLeft:"20px"}}>new Job offer</Button>
+        <CreateJob open={open} handleClose={handleClose} jobs={jobs} setJobs={setJobs}/>
 
         <Box mt={4} display='flex' flexDirection="row">
           <Grid container spacing={1}>
@@ -45,7 +45,8 @@ const JobManagement = () => {
           key={job._id}
           title={job.title}
           description={job.description}
-          jobID={job._id}/>
+          jobID={job._id}
+          country={job.country}/>
         </Grid>
         ))}
           

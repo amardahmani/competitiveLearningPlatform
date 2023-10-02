@@ -5,9 +5,9 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 
 const ListAlgorithmic = (props) => {
-  const {challengeID,algorithmicQuestions,handleSubmit,handleDelete} = props;
+  const {algorithmicQuestions} = props;
   
-
+  
   return (
     <Box> {/* Render the passed component if provided */}
 

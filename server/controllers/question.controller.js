@@ -8,22 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 
-export const pushAlgorithmic = async (req,res) => {
-  try{
-    const {challengeID,problem} = req.body;
-    
-    const challenge = await Challenge.findOne({_id:challengeID});
 
-    if(!challenge){
-        res.status(404).send({message:"challenge not found"});
-    }
-    challenge.algorithmicQuestions.push(problem);
-        challenge.save();
-        res.status(201).send({message:"question saved successfully",challenge});
-  }catch(err){
-    res.status(500).send({message:err.message})
-  }
-}
 
 export const createAlgorithmicChallenge = async (req,res) => {
     try{

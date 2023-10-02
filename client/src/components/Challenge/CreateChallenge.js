@@ -53,7 +53,6 @@ const CreateChallenge = (props) => {
     ],
   };
   const handleSubmit = async (values) => {
-    console.log("Form values in child: ", values);
     const formData = new FormData();
     formData.append('id',user.id);
     formData.append('title',values.title);

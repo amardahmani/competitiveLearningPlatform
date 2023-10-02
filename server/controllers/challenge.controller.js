@@ -40,15 +40,23 @@ export const createChallenge = async (req,res) => {
   }
   }
 
-export const createQuestionChallenge = async (req,res) => {
+export const pushAlgorithmicChallenge = async (req,res) => {
   const {challengeID} = req.params;
+  const {questionID} = req.body;
   try{
     const challenge = await Challenge.findOne({_id:challengeID});
-    
+    const algorithmic = await Algorithmic.findOne({_id:questionID});  
     if(!challenge){
       res.status(404).send({message:"challenge not found"});
     }
 
+    if(!algorithmic){
+      res.status(404).send({message:"algorithmic question not found"});
+    }
+
+    challenge.algorithmicQuestions.push(algorithmic);
+    await challenge.save();
+    res.status(200).send({message:"algorithmic question added successfully"});
   }catch(err){
     res.status(500).send({message:err.message});
   }
@@ -58,8 +66,7 @@ export const joinAlgorithmic = async (req,res) => {
   try{
     
     const {challengeID,id} = req.body;
-    console.log(challengeID);
-    console.log(id);
+    
     const challenge = await Challenge.findOne({_id:challengeID});
 
     console.log(challenge);
@@ -107,6 +114,10 @@ export const getChallengesPlanned = async (req,res) => {
       const challenge = challenges.find(challenge => challenge._id.equals(plannification.event._id));
       return { ...challenge, startDate: plannification.startDate, endDate: plannification.endDate };
     });
+
+    if(!challengeData){
+      return res.status.send({message:"No challenges found"});
+    }
 
     res.status(200).json(challengeData);
   }

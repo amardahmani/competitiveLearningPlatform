@@ -4,8 +4,8 @@ import image from '../../assets/image.png'
 
 import { useNavigate } from 'react-router-dom';
 const JobCard = (props) => {
-    const {title,duration,jobID,description} = props;
-    const data = {title,duration,description,jobID}
+    const {title,duration,jobID,description,country} = props;
+    const data = {title,duration,description,jobID,country}
     const [hover, setHover] = useState(false);
     const navigate = useNavigate();
     const handleMouseEnter = () => {
@@ -18,7 +18,7 @@ const JobCard = (props) => {
 
     
     const handleClick = () => {
-      navigate(jobID,{state:data});
+      navigate(jobID,{state:{title:title,duration:duration,jobID:jobID,description:description,country:country}});
     }
 
   return (

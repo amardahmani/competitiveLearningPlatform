@@ -18,6 +18,7 @@ import dayjs from 'dayjs';
 import { getCurrentUser } from '../../services/auth.service';
 import { getPlannedEvents, planEvent } from '../../services/plannification.service';
 import { getJobsUnplanned } from '../../services/job.service';
+import { toast } from 'react-toastify';
 
 
 const plannificationSchema = yup.object().shape({
@@ -120,6 +121,8 @@ const NewPlannification = (props) => {
     console.log(formData)
     planEvent(formData).then((response) => {
       console.log(response);
+      toast('Event planned successfully');
+      handleClose();
     }).catch((err) => {
       console.log(err);
     })

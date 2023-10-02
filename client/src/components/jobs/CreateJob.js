@@ -9,10 +9,12 @@ import FlexBetween from '../../lib/displays/FlexBetween';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import Dropzone from 'react-dropzone';
 import { createJob } from '../../services/job.service';
+import { toast } from 'react-toastify';
+
 const jobSchema = yup.object().shape({
     title:yup.string().required('required'),
     description: yup.string().required('required'),
-    positions: yup.string().required('enter the number of positions'),
+    duration: yup.string().required('enter the length of your event'),
     country: yup.string().required('enter the country'),
     poster: yup.string().required('upload your poster')
 })
@@ -20,13 +22,13 @@ const jobSchema = yup.object().shape({
 const jobInitialValues = {
   title:"",
   description:"",
-  positions:"",
+  duration:"",
   country:"",
   poster:""
 }
 
 const CreateJob = (props) => {
-  const {open,handleClose,jobs} = props;
+  const {open,handleClose,setJobs} = props;
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const editorRef = useRef();
 
@@ -54,13 +56,20 @@ const CreateJob = (props) => {
     const formData = new FormData();
     formData.append("title",values.title);
     formData.append("description",values.description);
-    formData.append("positions",values.positions);
+    formData.append("duration",values.dutation);
     formData.append("country",values.country);
     formData.append("poster", values.poster);
-
+    
     createJob(formData).then((response) => {
       console.log(response.data);
-
+      let job = {_id:response.data.data._id,title:response.data.data.title,country:response.data.data.country};
+      setJobs(prevArray => [...prevArray, job]);
+      toast('Your job Offer has been created successfully!', {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      handleClose();
     }).catch((err) => {
       console.log(err.message);
     })
@@ -70,7 +79,9 @@ const CreateJob = (props) => {
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>
+        <Typography variant='h3' sx={{textAlign:"center"}}>
         Create a new job offer
+        </Typography>
       </DialogTitle>
       <Divider />
       <DialogContent>
@@ -134,15 +145,15 @@ const CreateJob = (props) => {
               </Box>
               
               <TextField 
-                label="Positions"
+                label="Duration"
                 onBlur={handleBlur}
                 onChange={handleChange}
-                value={values.positions}
-                name="positions"
+                value={values.duration}
+                name="duration"
                 error={
-                  Boolean(touched.positions) && Boolean(errors.positions)
+                  Boolean(touched.duration) && Boolean(errors.duration)
                 }
-                helperText={touched.positions && errors.positions}
+                helperText={touched.duration && errors.duration}
                 sx={{ gridColumn: "span 2" }}
               />
               <TextField 
