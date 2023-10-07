@@ -17,6 +17,18 @@ export const createChallenge = (formData) => {
     });
 }
 
+export const updateChallenge = (challengeID,challenge) => {
+  return axios.put(API_URL+'/'+challengeID,challenge,{
+    headers:{
+      'Content-Type': 'multipart/form-data'
+    }
+  })
+}
+
+export const deleteChallenge = (challengeID) => {
+  return axios.delete(API_URL+'/'+challengeID);
+}
+
 export const getUnplannedChallenges = () => {
   return axios.get(API_URL+'/unplanned')
 }
@@ -53,6 +65,13 @@ export const getNonInstructors = (challengeID) => {
 export const getInstructors = (challengeID) => {
   return axios.get(API_URL+'/'+challengeID+'/instructors');
 }
+
+export const pushAlgorithmicChallenge = (challengeID,data) => {
+  return axios.post(API_URL+'/'+challengeID+'/questions',data,{headers:{
+      'Content-Type': 'application/json',
+  }});
+}
+
 
 export const pushInstructor = (challengeID, instructorID) => {
   return axios.post(API_URL + '/' + challengeID + '/add', { instructorId: instructorID }, {

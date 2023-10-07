@@ -9,35 +9,7 @@ import { createChallenge, getChallengesUser } from '../../../services/challenge.
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD';
 import { useNavigate } from 'react-router-dom';
 
-const CreationModal = ({open,handleOpen,handleClose,challenges}) => {
-    const user = getCurrentUser();
-    const handleCreateChallenge = async (values) => {
-    
-    }
-  return (
-    <Dialog  open={open} onClose={handleClose}  sx={{
-      "& .MuiDialog-container": {
-        "& .MuiPaper-root": {
-          width: "100%",
-          maxWidth: "1000px",  // Set your width here
-        },
-      },
-    }}>
-      <Box>
-      <DialogTitle>
-        <Typography variant='h3' textAlign='center'>
-        Create a new challenge
-        </Typography>
-      </DialogTitle>
-      <DialogContent>
-      <CreateChallenge challenges={challenges}/>
-      </DialogContent>
-      </Box>
-    </Dialog>
-  )
-}
-  
- 
+
 
 const ChallengeManagementRecruiter = () => {
 
@@ -68,15 +40,13 @@ const ChallengeManagementRecruiter = () => {
       setOpen(false);
     }
 
-    const handleSubmit = () => {
-      
-    }
+    
   return (
     <Box>
       
         <Button onClick={handleOpen} variant='outlined' sx={{marginLeft:"20px"}}>new Challenge</Button>
-        <CreationModal open={open} handleOpen={handleOpen} 
-        handleClose={handleClose} challenges={challenges}/>
+        <CreateChallenge open={open} handleClose={handleClose}
+        challenges={challenges} setChallenges={setChallenges}/>
       <Box mt={4} display='flex' flexDirection="row">
           <Grid container spacing={1}>
           
@@ -86,7 +56,9 @@ const ChallengeManagementRecruiter = () => {
           key={challenge._id}
           title={challenge.title}
           challengeID={challenge._id}
-          poster={challenge.poster}/>
+          duration={challenge.duration}
+          poster={challenge.poster}
+          description={challenge.description}/>
         </Grid>
         ))}
           

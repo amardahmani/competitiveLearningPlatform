@@ -1,63 +1,37 @@
 import { Box, Button, Card, CardContent, Typography } from '@mui/material'
-import React, { useEffect, useState } from 'react'
 import ListAlgorithmic from '../../../components/questions/algorithmic/ListAlgorithmic'
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD'
 import ProblemSetters from '../../../components/Challenge/ProblemSetters'
-import { useParams } from 'react-router-dom'
-import { getChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushInstructor, removeInstructor } from '../../../services/challenge.service'
+import { useLocation, useParams } from 'react-router-dom'
+import { getChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../../../services/challenge.service'
 import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
 import Instructors from '../../../components/tables/Instructors'
 import AddInstructorDialog from '../../../components/users/AddInstructorDialog'
-import EditChallenge from '../../../components/Challenge/EditChallenge'
+
 import QuestionLibrary from '../../../components/questions/algorithmic/QuestionLibrary'
+import UpdateDeleteCard from '../../../components/Challenge/cards/UpdateDeleteCard'
+import { createAlgorithmic } from '../../../services/questions.service'
+import { getCurrentUser } from '../../../services/auth.service'
+import { useEffect, useState } from 'react'
 const ChallengeDetail = (props) => {
 
-  const [openCreate,setOpenCreate] = useState(false);
-  const [questions,setQuestions] = useState([]);
+  const user = getCurrentUser();
+  const id = user.id;
+  
   const [open,setOpen] = useState(false);
   const [openLibrary,setOpenLibrary] = useState(false);
+  const [openAddInstructor,setOpenAddInstructor] = useState(false);
   const [instructors, setInstructors] = useState([]);
   const [savedInstructors, setSavedInstructors] = useState([]);
   const params = useParams();
   const challengeID = params.challengeID;
-  useEffect(() => {
-    const fetchData = async () => {
-      try{
-        const nonInstructorsResponse = await getNonInstructors(params.challengeID);
-        const nonInstructors = nonInstructorsResponse.data;
-  
-        const savedInstructorsResponse = await getInstructors(params.challengeID);
-        const savedInstructors = savedInstructorsResponse.data;
-        const questionsResponse = await getChallengeQuestions(params.challengeID);
-        const questions = questionsResponse.data;
-        setQuestions(questions.algorithmicQuestions);
-        setInstructors(nonInstructors);
-        setSavedInstructors(savedInstructors);
-      }catch(err){
-        console.log(err)
-      }
-    };
-    fetchData()
-  },[])
-  
-
-  const removeQuestion = (id) => {
-
-  }
-
-  const handleSubmit = (values) => {
-    const formData = new FormData();
-
-    formData.append('title',values.title);
-    formData.append('description',values.description);
-    formData.append('input',values.input);
-
-    console.log(formData);
-  }
-
+  const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
+  const {state} = useLocation();
+  const [challenge,setChallenge] = useState(state);
   const handleOpen = () => {
     setOpen(true);
-  } 
+  }
+  
   const handleClose = () => {
     setOpen(false);
   }
@@ -69,9 +43,17 @@ const ChallengeDetail = (props) => {
   const handleCloseLibrary = () => {
     setOpenLibrary(false);
   }
+
+  const handleOpenAddInstructor = () => {
+    setOpenAddInstructor(true);
+  }
+
+  const handleCloseAddInstructor = () => {
+    setOpenAddInstructor(false);
+  }
+
   const handleSave = (instructor) => {
     const instructorId = instructor._id;
-    const challengeID = params.challengeID;
     pushInstructor(challengeID,instructorId).then((response) => {
       console.log(response);
       setInstructors((prevInstructors) =>
@@ -105,81 +87,120 @@ const ChallengeDetail = (props) => {
 
   };
 
-  const pushAlgorithmicQuestion = (algorithmicQuestions,problem) => {
-    setQuestions([...algorithmicQuestions, problem]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try{
+        const nonInstructorsResponse = await getNonInstructors(challengeID);
+        const nonInstructors = nonInstructorsResponse.data;
+  
+        const savedInstructorsResponse = await getInstructors(challengeID);
+        const savedInstructors = savedInstructorsResponse.data;
+        const questionsResponse = await getChallengeQuestions(challengeID);
+        const questions = questionsResponse.data.algorithmicQuestions;
+        setAlgorithmicQuestions(questions);
+        setInstructors(nonInstructors);
+        setSavedInstructors(savedInstructors);
+      }catch(err){
+        console.log(err)
+      }
+    };
+    fetchData()
+  },[])
+  console.log(algorithmicQuestions)
+  const addAlgorithmicQuestion = (algorithmicQuestions,problem) => {
+    setAlgorithmicQuestions([...algorithmicQuestions, problem]);
   }
 
-
-  const handleOpenCreate = () => {
-    setOpenCreate(true);
+  const pushAlgorithmicQuestion = (challengeID,questionID) => {
+    return pushAlgorithmicChallenge(challengeID,questionID);
   }
-  const handleCloseCreate = () => {
-    setOpenCreate(false);
+
+  const handleSubmit = async (values) => {
+    const formData = new FormData();
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('difficulty', values.difficulty);
+    formData.append('points',values.points);
+    formData.append('input', values.input);
+    formData.append('expectedOutput', values.expectedOutput);
+    formData.append('creator',id);
+
+    createAlgorithmic(formData).then((response) => {
+      const problemId = response.data.algorithmic._id;
+      const challengeData = new FormData();
+      challengeData.append('challengeID',challengeID);
+      challengeData.append('problem',problemId);
+
+      pushAlgorithmicChallenge(challengeData).then((response) => {
+        console.log(response.data);
+      })
+    })
   }
   return (
-        <Box sx={{display:'flex',flexDirection:'column'}}>
-        
-        <Card variant="outlined" sx={{width:"90%",margin:"10px auto"}}>
-        <Box display="flex">
-        <Button variant='contained' onClick={handleOpen}
-        sx={{marginTop:"10px",marginLeft:"10px"}}
-        >Create new question</Button>
-        <Typography variant='h3' sx={{marginTop:"10px",marginLeft:"10px"}}>or</Typography>
-        <Button variant='outlined'
-        sx={{marginTop:"10px",marginLeft:"10px"}} onClick={handleOpenLibrary}>import question</Button>
-        </Box>
-        <QuestionLibrary 
+    <Box sx={{display:'flex',flexDirection:"row"}}>
+          
+    <Box width="70%">
+      <Button variant='contained' onClick={handleOpen}
+      sx={{marginLeft:"10px",marginRight:"10px"}}>New Question</Button>
+      Or   <Button sx={{marginLeft:"10px"}} variant='outlined' onClick={handleOpenLibrary}>Import Questions</Button>
+      <CreateAlgorithmic 
+      open={open} 
+      handleClose={handleClose}
+      handleSubmit={handleSubmit}
+      />
+
+      <QuestionLibrary
         open={openLibrary}
         handleCloseLibrary={handleCloseLibrary}
-        challengeID={challengeID}
-        algorithmicQuestions={questions}
+        eventID={challengeID}
+        algorithmicQuestions={algorithmicQuestions}
+        addAlgorithmicQuestion={addAlgorithmicQuestion}
         pushAlgorithmicQuestion={pushAlgorithmicQuestion}
         />
-        <CreateAlgorithmic 
-        handleSubmit={handleSubmit}
-        open={open} handleClose={handleClose} 
-        algorithmicQuestions={questions}/>
+      <Card variant="outlined" sx={{width:"100%"}}>
         <CardContent>
           <Typography variant="h3" textAlign='center' mt={1}>List Questions</Typography>
-          <Box
+            <Box
             sx={{
               overflow: {
                 xs: "auto",
                 sm: "unset",
               },
             }}
-          >
-            
-              <ListAlgorithmic 
-              algorithmicQuestions={questions}
+            >
               
-              />
+                <ListAlgorithmic  algorithmicQuestions={algorithmicQuestions}
+                />
+              
+              
 
-          </Box>
+            </Box>
         </CardContent>
-        </Card>
+      </Card>
+      <Button variant='contained' sx={{marginTop:"10px",marginLeft:"10px"}}
+        onClick={handleOpenAddInstructor}>Add instructor</Button>
+      <Card variant="outlined" sx={{width:"100%"}}>
         
-        <Card variant="outlined" sx={{width:"90%",margin:"10px auto"}}>
-              <Button variant='contained' sx={{marginTop:"10px",marginLeft:"10px"}}
-              onClick={handleOpenCreate}>Add instructor</Button>
-            <Instructors 
-            instructors={savedInstructors} nonInstructors={instructors}
-            handleDelete={handleDelete}
-            />
-            <AddInstructorDialog 
-            open={openCreate} 
-            instructors={savedInstructors} 
-            nonInstructors={instructors}
-            handleClose={handleCloseCreate}
-            handleSave={handleSave}
-            />
-        </Card>
-        
-        <Box sx={{width:"91%",margin:"10px auto"}}>
-            <EditChallenge />
-        </Box>
-        
-        </Box>
+      <Instructors 
+      instructors={savedInstructors} nonInstructors={instructors}
+      handleDelete={handleDelete}
+      />
+      <AddInstructorDialog
+      open={openAddInstructor} 
+      instructors={savedInstructors} 
+      nonInstructors={instructors}
+      handleClose={handleCloseAddInstructor}
+      handleSave={handleSave}
+      />
+  </Card>
+    </Box>
+  <Box mt={4} ml={3}>
+      <UpdateDeleteCard
+      challenge={challenge}/>
+      
+  </Box>
+  
+  </Box>
   )
 }
 

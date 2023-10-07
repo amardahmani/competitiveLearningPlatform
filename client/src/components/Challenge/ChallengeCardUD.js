@@ -6,7 +6,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 const ChallengeCardUD = (props) => {
-    const {title,duration,challengeID} = props;
+    const {title,duration,challengeID,description} = props;
 
     const [hover, setHover] = useState(false);
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const ChallengeCardUD = (props) => {
 
     
     const handleClick = () => {
-      navigate(challengeID);
+      navigate(challengeID,{state:{title:title,duration:duration,challengeID:challengeID,description:description}});
     }
 
   return (
@@ -49,7 +49,6 @@ const ChallengeCardUD = (props) => {
           <Box>
           <CardContent>
             <Typography variant="h5">{title} </Typography>
-            <Typography variant='h4'>{duration} </Typography>
           </CardContent>
           
           </Box>

@@ -1,11 +1,11 @@
-import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
+import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography,Dialog,DialogTitle,DialogContent, Divider } from '@mui/material'
 import { Formik } from 'formik'
 import React, { useEffect, useRef, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyUploadAdapter from '../../utils/MyUploadAdapter';
-import axios from 'axios';
 import * as yup from "yup"
+import { toast } from 'react-toastify';
 import Dropzone from 'react-dropzone';
 import FlexBetween from '../../lib/displays/FlexBetween';
 import EditIcon from '@mui/icons-material/Edit';
@@ -30,7 +30,7 @@ const initialValuesCreate = {
 }
 
 const CreateChallenge = (props) => {
-  const {challenges} = props;
+  const {setChallenges,challenges,open,handleClose} = props;
   const user = getCurrentUser();
   const editorRef = useRef();
   const editorConfig = {
@@ -61,9 +61,17 @@ const CreateChallenge = (props) => {
     formData.append('duration',values.duration);
     formData.append('poster',values.poster);
     createChallenge(formData).then((response) => {
-        let challenge = {title:response.title,description:response.description,_id:response._id}
-        challenges.push(challenge);
+        let challenge = {title:response.data.challenge.title,description:response.data.challenge.description,_id:response.data.challenge._id}
+        console.log(challenge)
+        setChallenges(prevArray => [...prevArray, challenge]);
         console.log(response.data.challenge);
+        toast.success('the challenge has been created Successfully', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'toast--success',
+          progressClassName: 'toast__progress--success',
+        });
+        handleClose();
+        
     }).catch((error) => {
       console.log(error);
     })
@@ -73,6 +81,13 @@ const CreateChallenge = (props) => {
   
 
   return (
+
+    <Dialog open={open} onClose={handleClose}>
+    <DialogTitle>
+      <Typography variant='h3'>Create a new challenge</Typography>
+    </DialogTitle>
+    <Divider />
+    <DialogContent>
     <Box>
         
         <Formik validationSchema={createChallengeSchema} initialValues={initialValuesCreate}  
@@ -212,6 +227,8 @@ const CreateChallenge = (props) => {
           )}
         </Formik>
     </Box>
+    </DialogContent>
+    </Dialog>
   )
 }
 

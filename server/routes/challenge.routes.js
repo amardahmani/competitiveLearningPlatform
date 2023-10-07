@@ -1,11 +1,13 @@
 import express from 'express'
-import { createChallenge, getChallenge, getChallengeQuestions, getChallengesPlanned, getChallengesUser, getInstructors, getNonInstructors, getUnplannedChallenges, joinAlgorithmic, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../controllers/challenge.controller.js'
+import { createChallenge, deleteChallenge, getChallenge, getChallengeQuestions, getChallengesPlanned, getChallengesUser, getInstructors, getNonInstructors, getUnplannedChallenges, joinAlgorithmic, pushAlgorithmicChallenge, pushInstructor, removeInstructor, updateChallenge } from '../controllers/challenge.controller.js'
 import { posterUpload } from '../middleware/upload.js';
 import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router()
 
 router.post('/create',posterUpload.single('poster'),createChallenge);
-router.get('/unplanned',getUnplannedChallenges)
+router.put('/:challengeID',posterUpload.single('poster'),updateChallenge);
+router.delete('/:challengeID',deleteChallenge);
+router.get('/unplanned',getUnplannedChallenges);
 router.get('/planned',getChallengesPlanned);
 router.get('/user', verifyToken, getChallengesUser);
 router.get('/:id',getChallenge);

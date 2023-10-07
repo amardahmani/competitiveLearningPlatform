@@ -5,6 +5,7 @@ import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useDropzone } from 'react-dropzone';
 import { updateJob } from '../../services/job.service';
+import { toast } from 'react-toastify';
 
 const editorConfig = {
     placeholder: 'Enter your description here',
@@ -57,7 +58,12 @@ const EditJob = (props) => {
       }
       
       updateJob(job.jobID,formData).then((response) => {
-        console.log(response.data);
+        
+        toast.success('Your changes have been saved successfully!', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'toast--success',
+          progressClassName: 'toast__progress--success',
+        });
         handleClose()
       }).catch((err) => {
         console.log(err)

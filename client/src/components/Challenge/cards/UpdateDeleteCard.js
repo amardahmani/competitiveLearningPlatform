@@ -1,51 +1,53 @@
+import EditChallenge from '../EditChallenge';
 import { Box, Button,Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
-import EditJob from './EditJob';
 import { useNavigate } from 'react-router-dom';
-import { deleteJob } from '../../services/job.service';
+import { deleteChallenge } from '../../../services/challenge.service';
 import { toast } from 'react-toastify';
 
 
 
+const DeleteChallengeModal = (props) => {
 
-const DeleteJobModal = (props) => {
-    const {open,handleClose} = props;
     const navigate = useNavigate();
-    const handleDelete = (id) => {
-      deleteJob(id).then((response) => {
-        toast('Your job Offer has been created successfully!', {
-          type: 'success',
-          autoClose: true,
-          position: 'top-right',
+    const {challengeID,open,handleClose} = props;
+    const handleDelete = () => {
+      deleteChallenge(challengeID).then(() => {
+        toast.success('the challenge has been deleted Successfully', {
+          position: toast.POSITION.TOP_RIGHT,
+          className: 'toast--success',
+          progressClassName: 'toast__progress--success',
         });
-        navigate('/jobs/');
+        navigate('/recruiter/challenge');
+        handleClose();
       }).catch((err) => {
         console.log(err);
       })
+        
     }
 
     return (
-      <Box>
         <Dialog open={open} onClose={handleClose}>
           <DialogTitle>
-            <Typography variant="h3">Do you want to delete you job</Typography>
+            <Typography variant='h3'>Delete Challenge</Typography>
           </DialogTitle>
+          <DialogContent>
+            do you want to delete this challenge
+          </DialogContent>
           <DialogActions>
-            <Button onClick={handleDelete} variant='contained'>Confirm</Button>
-            <Button onClick={handleClose} variant='outlined'>Cancel</Button>
+            <Button variant='outlined' onClick={handleClose}>Cancel</Button>
+            <Button variant='contained' onClick={handleDelete}>Confirm</Button>
           </DialogActions>
         </Dialog>
-      </Box>
-    );
+    )
 }
 
-const CardUD = ({job}) => {
-    
 
+const UpdateDeleteCard = ({challenge}) => {
     const [openEdit,setOpenEdit] = useState(false);
     const [openDelete,setOpenDelete] = useState(false);
 
@@ -70,11 +72,13 @@ const CardUD = ({job}) => {
         <Button color='success' size="medium" onClick={handleOpenEdit}><EditIcon /></Button>
         <Button color='danger' size="medium" onClick={handleOpenDelete}><DeleteIcon /></Button>
         <Button color='primary' size="medium"><VisibilityIcon /></Button>
-        <EditJob open={openEdit} handleClose={handleCloseEdit}
-        job={job}/>
-        <DeleteJobModal open={openDelete} handleClose={handleCloseDelete} />
+        <EditChallenge open={openEdit} handleClose={handleCloseEdit}
+        challenge={challenge}/>
+        <DeleteChallengeModal open={openDelete} handleClose={handleCloseDelete} 
+        challengeID={challenge.challengeID}/>
     </Card>
   )
 }
 
-export default CardUD
+
+export default UpdateDeleteCard;

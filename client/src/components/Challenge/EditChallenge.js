@@ -1,7 +1,13 @@
-import { Box, Button, Card, CardContent, Divider, TextField, Typography } from '@mui/material'
-import React from 'react'
+import { Box, Button,  Dialog, DialogContent, DialogTitle, Divider, TextField, Typography } from '@mui/material';
+import React, { useEffect, useState } from 'react'
 import { useDropzone } from 'react-dropzone';
-import EditIcon from '@mui/icons-material/Edit';
+import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import ChallengeCardUD from './ChallengeCardUD';
+import { updateChallenge } from '../../services/challenge.service';
+import { toast } from 'react-toastify';
+
 const editorConfig = {
     placeholder: 'Enter your description here',
     toolbar: [
@@ -23,67 +29,116 @@ const editorConfig = {
 
 const EditChallenge = (props) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+    const {open,handleClose,challenge} = props;
+
+    const [values, setValues] = useState({
+      description: '',
+      title:'',
+      duration:''
+      // Add more fields as needed
+    });
+  const handleInputChange = (field, value) => {
+      setValues((prevValues) => ({
+        ...prevValues,
+        [field]: value,
+      }));
+  };
+
+  useEffect(() => {
+    if (challenge) {
+        setValues({
+            description: challenge.description || '',
+            title: challenge.title || '',
+            duration: challenge.duration || ''
+        });
+        
+    }
+}, [challenge]);
+  const handleSubmit = () => {
+    const formData = new FormData();
+
+    formData.append('title', values.title);
+    formData.append('duration', values.duration);
+    formData.append('description', values.description);
+
+    if (acceptedFiles.length > 0) {
+      formData.append('poster', acceptedFiles[0]);
+    }
+
+    updateChallenge(challenge.challengeID,formData).then(() => {
+      toast.success('Your changes have been saved successfully!', {
+        position: toast.POSITION.TOP_RIGHT,
+        className: 'toast--success',
+        progressClassName: 'toast__progress--success',
+      });
+      handleClose();
+    }).catch((err) => {
+      console.log(err);
+    })
+
+  }
+
 
   return (
-    <Card
-        variant="outlined"
-        sx={{
-          p: 0,
-        }}
-      >
-        <Box
-          sx={{
-            padding: "15px 30px",
-          }}
-          display="flex"
-          alignItems="center"
-        >
-          <Box flexGrow={1}>
-            <Typography
-              sx={{
-                fontSize: "18px",
-                fontWeight: "500",
-              }}
-            >
-              Edit Challenge
-            </Typography>
-          </Box>
-        </Box>
+    <Dialog open={open} onClose={handleClose} sx={{
+      "& .MuiDialog-container": {
+        "& .MuiPaper-root": {
+          width: "100%",
+          maxWidth: "1000px",  // Set your width here
+        },
+      },
+    }}>
+        <DialogTitle sx={{marginTop:"5px"}}>
+        <Typography variant='h3' textAlign='center' color="primary.main">
+        Edit Job
+        </Typography>
+        </DialogTitle>
         <Divider />
-        <CardContent
-          sx={{
-            padding: "30px",
-          }}
-        >
+        <DialogContent>
+        
+        
+        <Divider />
+        
           
             <TextField
               id="title"
               label="title"
               variant="outlined"
-              defaultValue="George deo"
+              name="title"
+              value={values.title}
+              onChange={(event) => handleInputChange('title', event.target.value)}
               fullWidth
               sx={{
                 mb: 2,
               }}
             />
-            
-            
-            <Box>
-
-            </Box>
             <TextField
-              id="readonly-text"
-              label="Read Only"
-              defaultValue="Hello World"
-              inputprops={{
-                readOnly: true,
-              }}
+              name="duration"
+              id="duration"
+              label="duration"
               variant="outlined"
+              value={values.duration}
+              onChange={(event) => handleInputChange('duration', event.target.value)}
               fullWidth
               sx={{
                 mb: 2,
               }}
             />
+            
+            
+            
+            <Box sx={{ mb: 2 }}>
+            <CKEditor
+            editor={ClassicEditor}
+            config={editorConfig}
+            data={values.description}
+            onChange={(event, editor) => {
+              const data = editor.getData();
+              handleInputChange('description', data);
+            }}
+            />
+            </Box>
+            
             <Box {...getRootProps()} p={2} sx={{ border: '1px solid', borderColor: 'secondary.main',borderRadius:'5px' }}>
             <input {...getInputProps()} />
             
@@ -92,20 +147,21 @@ const EditChallenge = (props) => {
             ) : (
               <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
                 <Typography>{acceptedFiles[0].name}</Typography>
-                <EditIcon />
+                <EditOutlinedIcon />
               </Box>
             )}
           </Box>
             
             
             <Box mt={2}>
-              <Button color="primary" variant="contained">
+              <Button color="primary" variant="contained" onClick={handleSubmit}>
                 Submit
               </Button>
             </Box>
           
-        </CardContent>
-      </Card>
+            
+        </DialogContent>
+    </Dialog>
   )
 }
 
