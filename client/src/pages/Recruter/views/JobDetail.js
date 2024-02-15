@@ -108,7 +108,7 @@ const JobDetail = (props) => {
   const addAlgorithmicQuestion = (algorithmicQuestions,problem) => {
     setAlgorithmicQuestions([...algorithmicQuestions, problem]);
   }
-
+  
   const pushAlgorithmicQuestion = (jobID,questionID) => {
     return pushAlgorithmicJob(jobID,questionID);
   }

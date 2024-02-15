@@ -1,17 +1,22 @@
 import { Box, Button } from '@mui/material'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import PathTabs from '../../../components/learningPath/PathTabs'
 import ListAlgorithmic from '../../../components/questions/algorithmic/ListAlgorithmic'
 import { useParams } from 'react-router-dom'
-import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
 import CreateTutorial from '../../../components/tutorial/CreateTutorial'
-const ButtonTutorial = () => {
+import { getAlgorithmicQuestions, getTutorials } from '../../../services/gamifiedTutorial.service'
+import QuestionLibrary from '../../../components/questions/algorithmic/QuestionLibrary'
+import TutorialUpdateDelete from '../../../components/tutorial/TutorialUpdateDelete'
+import { getAlgorithmicModule, pushAlgorithmicModule } from '../../../services/module.service'
+
+const ButtonTutorial = (props) => {
+  const {moduleID,setTutorials} = props;
 
   const [open,setOpen] = useState(false);
-  
 
   const handleOpen = () => {
     setOpen(true);
+    console.log("set Tutorials in button tutorial"+setTutorials)
   }
 
   const handleClose = () => {
@@ -23,44 +28,50 @@ const ButtonTutorial = () => {
     <Box>
       <Button variant='contained' onClick={handleOpen}>Create a new Tutorial</Button>
 
-      <CreateTutorial open={open} handleClose={handleClose}/>
+      <CreateTutorial open={open} handleClose={handleClose} moduleID={moduleID}
+      setTutorials={setTutorials}/>
+      
     </Box>
   )
 }
 
-const Algorithmic = () => {
-  const params = useParams();
-  const [open,setOpen] = useState(false);
-  const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
-  const handleOpen = () => {
-    setOpen(true);
-  }
-
-  const handleClose = () => {
-    setOpen(false);
-  }
-  return (
-    <Box>
-      <Button variant='contained' onClick={handleOpen}>new gamified quest</Button>
-
-      <ListAlgorithmic 
-        algorithmicQuestions={algorithmicQuestions}
-      />
-      <CreateAlgorithmic open={open}
-      handleClose={handleClose} 
-      algorithmicQuestions={algorithmicQuestions}/>
-
-    </Box>
-  )
-}
 
 const GamifiedTutorial = () => {
+  const params = useParams();
+  const moduleID = params.moduleID;
+
+  const [tutorials,setTutorials] = useState([]);
+  const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tutorialsResponse = await getTutorials(moduleID);
+        setTutorials(tutorialsResponse.data.tutorials);
+  
+        const algorithmicQuestionsResponse = await getAlgorithmicModule(moduleID);
+        console.log(algorithmicQuestionsResponse);
+        setAlgorithmicQuestions(algorithmicQuestionsResponse.data.problems);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+  
+    fetchData();
+  }, [moduleID]);
+  
   return (
     <Box>
         <PathTabs 
         ButtonTutorial={ButtonTutorial}
-
-        Algorithmic={Algorithmic}
+        TutorialUpdateDelete={TutorialUpdateDelete}
+        tutorials={tutorials}
+        moduleID={moduleID}
+        setTutorials={setTutorials}
+        QuestionLibrary={QuestionLibrary}
+        algorithmicQuestions={algorithmicQuestions}
+        ListAlgorithmic={ListAlgorithmic}
         />
         
     </Box>

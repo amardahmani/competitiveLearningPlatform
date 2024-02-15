@@ -6,13 +6,11 @@ import CreateIcon from '@mui/icons-material/Create';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 const PathCard = (props) => {
-    const { buttons: ButtonsComponent } = props;
-    const {title,description,pathID,image} = props;
-    const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
+    const {title,description,pathID,image,MoreUD,setPaths} = props;
     const {actions: ActionsComponent} = props;
+    const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
     const [showMore, setShowMore] = useState(false);
     const navigate = useNavigate();
-
     const handleClick = () => {
         navigate(pathID)
     }
@@ -32,15 +30,16 @@ const PathCard = (props) => {
                         <Typography variant='h4' mb={2}>{title}</Typography>
                         <Typography variant='span'>{showMore ? description : `${description.substring(0, 100)}`}</Typography>
                     </Box>
-                    {ButtonsComponent && <ButtonsComponent 
-                    title={title}
-                    description={description}
-                    pathID={pathID}/>} {/* Render the passed component if provided */}
-                    
+                    {/* I want to display it in here  */}
+                    {MoreUD && (
+            /* Display the MoreUD component if it's passed as a prop */
+                            <MoreUD title={title} description={description} pathID={pathID} setPaths={setPaths} />
+                        )}
                 </Box>
-                {ActionsComponent && <ActionsComponent 
-                pathID={pathID}/>}
+                
             </CardContent>
+            {ActionsComponent && <ActionsComponent 
+                pathID={pathID}/>}
             
         </Card>
     

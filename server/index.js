@@ -18,6 +18,7 @@ import submissionRoutes from './routes/submission.routes.js';
 import pathRoutes from './routes/path.routes.js';
 import moduleRoutes from './routes/module.routes.js';
 import jobRoutes from './routes/job.routes.js';
+import tutorialRoutes from './routes/tutorial.routes.js';
 /* CONFIGURATIONS */
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -46,7 +47,8 @@ app.use("/plan",plannificationRoutes);
 app.use("/submissions",submissionRoutes);
 app.use("/path",pathRoutes);
 app.use("/module",moduleRoutes);
-app.use("/job",jobRoutes)
+app.use("/job",jobRoutes);
+app.use("/tutorial",tutorialRoutes);
 /* MONGOOSE SETUP */
 
 const PORT = process.env.PORT || 3001;

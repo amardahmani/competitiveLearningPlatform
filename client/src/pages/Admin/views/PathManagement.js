@@ -34,18 +34,20 @@ const PathManagement = () => {
   return (
     <Box>
         <Button variant='contained' onClick={handleOpen} sx={{marginLeft:"10px"}}>new learning path</Button>
-        <PathCreation open={open} handleClose={handleClose} />
+        <PathCreation open={open} handleClose={handleClose} setPaths={setPaths}/>
 
         
           <Grid container spacing={1}>
             {paths && paths.map((path) => (
               <Grid item md={4} xs={12}>
-                <PathCard buttons={MoreUD}
+                <PathCard MoreUD={MoreUD}
                 actions={LearnMore}
                 key={path._id}
                 image={path.image}
                 description={path.description}
                 title={path.title}
+                setPaths={setPaths}
+                
                 pathID={path._id}/>
               </Grid>
             ))}

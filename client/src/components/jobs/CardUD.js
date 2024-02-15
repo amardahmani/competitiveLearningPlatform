@@ -1,6 +1,5 @@
 import { Box, Button,Card, Dialog, DialogActions, DialogContent, DialogTitle, TextField, Typography } from '@mui/material'
 import React, { useState } from 'react'
-
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import VisibilityIcon from '@mui/icons-material/Visibility';
@@ -8,7 +7,6 @@ import EditJob from './EditJob';
 import { useNavigate } from 'react-router-dom';
 import { deleteJob } from '../../services/job.service';
 import { toast } from 'react-toastify';
-
 
 
 

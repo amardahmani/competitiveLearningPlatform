@@ -6,6 +6,7 @@ import * as yup from 'yup';
 import Dropzone from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { createModule } from '../../services/module.service';
+import { toast } from 'react-toastify';
 
 const moduleSchema = yup.object().shape({
     title: yup.string().required('required'),
@@ -20,7 +21,7 @@ const initialModule = {
 }
 
 const CreateModule = (props) => {
-    const {open,handleClose,pathID} = props;
+    const {open,handleClose,pathID,setModules} = props;
 
     const handleSubmit = (values) => {
       const formData = new FormData();
@@ -29,7 +30,17 @@ const CreateModule = (props) => {
       formData.append('image',values.image);
       console.log(formData)
       createModule(pathID,formData).then((response) => {
-        console.log(response.data);
+        console.log(response);
+      let module = {_id:response.data.module._id,title:response.data.module.title,image:response.data.module.image};
+      setModules(prevArray => [...prevArray, module]);
+      toast(response.data.message, {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      
+      handleClose();
+      
       }).then((err) => {
         console.log(err);
       })

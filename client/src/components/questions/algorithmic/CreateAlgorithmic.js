@@ -1,4 +1,4 @@
-import { Box, Dialog, DialogContent,Select ,DialogTitle, Modal, TextField,Button, InputLabel, Typography, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, FormControl, MenuItem, Link } from '@mui/material';
+import { Box, Dialog, DialogContent,Select ,DialogTitle, Modal, TextField,Button, InputLabel, Typography, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, FormControl, MenuItem, Link, Divider } from '@mui/material';
 import React, { useEffect, useRef, useState } from 'react'
 import * as yup from 'yup';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
@@ -7,15 +7,12 @@ import { Formik } from 'formik';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import FlexBetween from '../../../lib/displays/FlexBetween';
-import UpdateIcon from '@mui/icons-material/Update';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { createAlgorithmic, getAllAlgorithmic } from '../../../services/questions.service';
+import { createAlgorithmic } from '../../../services/questions.service';
 import { getCurrentUser } from '../../../services/auth.service';
 import { useParams } from 'react-router-dom';
 import MyUploadAdapter from '../../../utils/MyUploadAdapter';
 import FormControlContext from '@mui/material/FormControl/FormControlContext';
-import { pushQuestion } from '../../../services/questions.service';
-
+import { toast } from 'react-toastify';
 
 const questionSchema = yup.object().shape({
     title: yup.string().required("please enter the title for your question"),
@@ -38,8 +35,9 @@ const questionSchema = yup.object().shape({
   
   
   const CreateAlgorithmic = (props) => {
-    const {open,setOpen,addProblem,algorithmicQuestions,handleClose,handleSubmit} = props;
-    
+    const {open,setAlgorithmicQuestions,handleClose} = props;
+    const id = getCurrentUser().id;
+    console.log("user id: " + id);
     const editorRef = useRef();
     const editorConfig = {
       
@@ -61,7 +59,30 @@ const questionSchema = yup.object().shape({
       ],
     };
     
-  
+    
+    const handleSubmit = async (values) => {
+      const formData = new FormData();
+      formData.append('title', values.title);
+      formData.append('description', values.description);
+      formData.append('difficulty', values.difficulty);
+      formData.append('points', values.points);
+      formData.append('input', values.input);
+      formData.append('expectedOutput', values.expectedOutput);
+      formData.append('creator',id);
+      try {
+        const response = await createAlgorithmic(formData);
+        const newProblem = response.data.algorithmic;
+        setAlgorithmicQuestions(prevState => [...prevState, newProblem]);
+        toast('Your question has been created successfully!', {
+          type: 'success',
+          autoClose: true,
+          position: 'top-right',
+        });
+        handleClose();
+      } catch (error) {
+        console.error('Error creating algorithmic problem:', error);
+      }
+    }
     
     
     return (
@@ -74,7 +95,10 @@ const questionSchema = yup.object().shape({
           },
         },
       }}>
-        <DialogTitle>Create a new question</DialogTitle>
+        <DialogTitle>
+          <Typography variant='h3' color='primary' align='center'>Create a new question</Typography>
+        </DialogTitle>
+        <Divider />
         <DialogContent>
           <Formik initialValues={initialQuestion} validationSchema={questionSchema} onSubmit={handleSubmit}>
             {({
@@ -227,7 +251,7 @@ const questionSchema = yup.object().shape({
                     </Dropzone>
                   </Box>
                   
-                  <Button color='primary' onClick={handleSubmit}>create</Button>
+                  <Button variant='contained' onClick={() => handleSubmit()}>create</Button>
   
               </Box>
               

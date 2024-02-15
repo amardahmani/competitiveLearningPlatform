@@ -5,21 +5,20 @@ import * as yup from "yup"
 import MyUploadAdapter from '../../utils/MyUploadAdapter'; 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { createTutorial } from '../../services/gamifiedTutorial.service';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 
 
 const tutorialSchema = yup.object().shape({
     title:yup.string().required('required'),
     description: yup.string().required('required'),
-    topic:yup.string().required('required'),
-    difficulty:yup.string().required('required')
 })
 
 const tutorialInitialValues = {
   title:"",
   description:"",
-  topic:"",
-  difficulty:""
 }
 const CreateTutorial = (props) => {
 
@@ -46,10 +45,39 @@ const CreateTutorial = (props) => {
     ],
   };
 
-    const {open,handleClose} = props;
+    const {open,handleClose,moduleID,setTutorials} = props;
+    
+    const handleSubmit = (values) => {
+      
+      const tutorialData = {
+        title: values.title,
+        description: values.description,
+      };
+      
+      createTutorial(moduleID,tutorialData).then((response) => {
+        console.log(response)
+        let tutorial = {
+          _id:response.data.tutorial._id,
+          title:response.data.tutorial.title,
+          description: response.data.tutorial.description
+        }
 
-    const handleSubmit = () => {
+        console.log(tutorial);
 
+        setTutorials(prevTutorials => [...prevTutorials, tutorial]);
+
+        toast('Your Tutorial has been created successfully!', {
+          type: 'success',
+          autoClose: true,
+          position: 'top-right',
+        });
+
+        handleClose();
+
+
+      }).catch((err) => {
+        console.log(err);
+      })
     }
     return (
         <Dialog open={open} onClose={handleClose}>

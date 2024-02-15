@@ -14,6 +14,14 @@ export const createAlgorithmic = (question) => {
     return axios.post(API_URL+'/algorithmic',question,config);
 }
 
+export const deleteAlgorithmicQuestion = (questionID) => {
+  return axios.delete(API_URL+'/algorithmic/'+questionID,{
+    headers:{
+      'Content-Type': 'application/json',
+    }
+  })
+}
+
 export const getAlgorithmic = (id) => {
   return axios.get(API_URL+'/algorithmic/'+id);
 }

@@ -39,6 +39,7 @@ import ChallengeManagementInstructor from './pages/Instructor/views/ChallengeMan
 import RequireAuth from './components/auth/RequireAuth';
 import AuthForm from './components/auth/AuthForm';
 import { ToastContainer } from 'react-toastify';
+import QuestionManagement from './pages/Instructor/views/QuestionManagement';
 
 
 
@@ -91,7 +92,8 @@ function App () {
           <Route path="/instructor/challenge/:challengeID" element={<ChallengeDetail />}/>
           <Route path="/instructor/path" element={<PathPage />} />
           <Route path="/instructor/path/:pathID" element={<ModuleManagementInstructor />} />
-          <Route path="/instructor/path/:pathID/:moduleID" element={<ModuleManagementInstructor />}/>
+          <Route path="/instructor/path/:pathID/:moduleID" element={<GamifiedTutorial />}/>
+          <Route path="/instructor/questions" element={<QuestionManagement />} />
           </Route>
           
         </Route>

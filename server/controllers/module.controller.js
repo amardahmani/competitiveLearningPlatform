@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Module from "../models/module.model.js";
 import Path from "../models/path.model.js";
 
@@ -30,6 +31,47 @@ export const createModule = async (req,res) => {
     }
 }
 
+export const pushAlgorithmicQuestion = async (req,res) => {
+  const moduleID = req.params.moduleID;
+  const questionID  = req.body.questionID;
+
+
+  try{
+    const module = await Module.findById(moduleID);
+  
+    if(!module){
+      res.status(404).send({message:"module not found"});
+    }
+
+    module.problems.push(questionID);
+    await module.save();
+    return res.status(200).send({message:"problem added successfully"})
+  }catch(err){
+    res.status(500).send({message:err.message});
+  }
+}
+
+export const getAlgorithmicQuestions = async (req,res) => {
+  const moduleID = req.params.moduleID;
+
+  try{
+    if (!mongoose.Types.ObjectId.isValid(moduleID)) {
+      return res.status(400).json({ message: 'Invalid module ID' });
+    }
+    const module = await Module.findById(moduleID).populate('problems');
+
+    if (!module) {
+      return res.status(404).json({ message: 'Module not found' });
+    }
+
+    const problems = module.problems;
+
+    res.status(200).json({ problems });
+  }catch(err){
+    res.status(500).send({message:err.message});
+  }
+
+}
 
 export const getModules = (req,res) => {
     const pathID = req.params.pathID;
@@ -72,7 +114,8 @@ export const updateModule = async (req, res) => {
   // Delete a module
   export const deleteModule = async (req, res) => {
     const moduleId = req.params.moduleID;
-  
+    console.log(moduleId)
+    const pathID = req.params.pathID;
     try {
       const deletedModule = await Module.findByIdAndRemove(moduleId);
   
@@ -84,7 +127,7 @@ export const updateModule = async (req, res) => {
   
       // Find the associated path and update its modules array
       const updatedPath = await Path.findByIdAndUpdate(
-        pathId,
+        pathID,
         { $pull: { modules: moduleId } },
         { new: true }
       );

@@ -13,6 +13,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import FlexBetween from '../../lib/displays/FlexBetween';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentUser, login,register } from '../../services/auth.service';
+import { toast } from 'react-toastify';
 
 
 const registerSchema = yup.object().shape({
@@ -74,6 +75,11 @@ const AuthForm = () => {
     
 
     login(JSON.stringify(values)).then(() => {
+      toast.success('logged in successfully', {
+        position: toast.POSITION.TOP_RIGHT,
+        className: 'toast--success',
+        progressClassName: 'toast__progress--success',
+      });
       const user = getCurrentUser();
       setUser(user);
       if(user.role==="ADMIN"){
@@ -91,6 +97,7 @@ const AuthForm = () => {
       if(user.role === "ANALYST"){
         navigate("/analyst/dashboard/")
       }
+      
       window.location.reload();
     },(error) => {
       const resMessage =
@@ -100,6 +107,11 @@ const AuthForm = () => {
             error.message ||
             error.toString();
             setMessage(resMessage);
+            toast.error(resMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+              className: 'toast--error',
+              progressClassName: 'toast__progress--error',
+            });
     })
 
   }

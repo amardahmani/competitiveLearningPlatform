@@ -4,13 +4,12 @@ import image from '../../assets/square.png';
 import { useNavigate } from 'react-router-dom';
 
 const ModuleCard = (props) => {
-  const { buttons: ButtonsComponent } = props;
-  const {title,description,moduleID} = props;
+  const {title,description,moduleID,UpdateDeleteButtons,setModules,pathID} = props;
   const {buttonDescription} = props;
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate('module/'+moduleID);
+    navigate(moduleID);
   }
   return (
     <Card>
@@ -24,8 +23,10 @@ const ModuleCard = (props) => {
         </Box>
         
         </Box>
-        {ButtonsComponent && <ButtonsComponent title={title} description={buttonDescription}
+        {UpdateDeleteButtons && <UpdateDeleteButtons title={title} description={buttonDescription}
         moduleID={moduleID}
+        pathID={pathID}
+        setModules={setModules}
         />} {/* Render the passed component if provided */}
         <Box display='flex' justifyContent='flex-end' width='100%'mb={2}>
           <Button variant='contained' sx={{marginRight:"10px"}} onClick={handleClick}>Learn More</Button>

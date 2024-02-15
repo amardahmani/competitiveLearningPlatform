@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react'
 import CreateChallenge from '../../../components/Challenge/CreateChallenge'
 import ListAlgorithmic from '../../../components/questions/algorithmic/ListAlgorithmic';
 import * as yup from "yup"
-import Confirmation from '../../../components/questions/algorithmic/Confirmation';
 import { getCurrentUser } from '../../../services/auth.service';
 import { createChallenge, getChallengesUser } from '../../../services/challenge.service';
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD';

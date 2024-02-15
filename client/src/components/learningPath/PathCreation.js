@@ -1,4 +1,4 @@
-import { Box, Button, Dialog, DialogContent, DialogTitle, TextField,Typography } from '@mui/material'
+import { Box, Button, Dialog, DialogContent, DialogTitle, TextField,Typography,Divider } from '@mui/material'
 import React, { useState } from 'react'
 import FlexBetween from '../../lib/displays/FlexBetween';
 import { Formik } from "formik";
@@ -6,7 +6,7 @@ import * as yup from 'yup';
 import Dropzone from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { createPath } from '../../services/path.service';
-
+import { toast } from 'react-toastify';
 
 const pathSchema = yup.object().shape({
     title: yup.string().required('required'),
@@ -21,7 +21,7 @@ const initialPath = {
 }
 
 const PathCreation = (props) => {
-    
+    const {open,handleClose,setPaths} = props;
     const handleSubmit = (values) => {
         const formData = new FormData();
         formData.append('title',values.title);
@@ -30,12 +30,19 @@ const PathCreation = (props) => {
         console.log(formData)
         createPath(formData).then((response) => {
             console.log(response)
+            let path = {_id:response.data._id,title:response.data.title,description:response.data.description,image:response.data.image};
+            setPaths(prevArray => [...prevArray, path]);
+            toast('learning path created successfully', {
+              type: 'success',
+              autoClose: true,
+              position: 'top-right',
+            });
+            handleClose();
         }).catch((err) => {
             console.log(err);
         })
     }
 
-    const {open,handleClose} = props;
     return (
         <Dialog
             open={open}
@@ -48,8 +55,10 @@ const PathCreation = (props) => {
                 },
             },
             }}>
-            <DialogTitle>Create a new learning path</DialogTitle>
-
+            <DialogTitle>
+              <Typography variant="h3" color="primary" align='center'>Create a new learning path</Typography>
+            </DialogTitle>
+            <Divider />
             <DialogContent>
         <Formik initialValues={initialPath} validationSchema={pathSchema} onSubmit={handleSubmit}>
           {({

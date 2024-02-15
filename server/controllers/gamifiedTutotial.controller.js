@@ -3,28 +3,29 @@ import Module from "../models/module.model.js";
 
 export const createTutorial = async (req,res) => {
     
-    const {title,description,topic,difficulty} = req.body;
+    const {title,description} = req.body;
     const moduleID = req.params.moduleID;
     try{
     const module = await Module.findById(moduleID);
-
     if(!module){
         res.status(404).send({message:"module not found"});
     }
 
+    if (!module.tutorials) {
+      module.tutorials = [];
+  }
+  
     const gamifiedTutorial = new GamifiedTutorial({
         title,
         description,
-        topic,
-        difficulty,
         creator: req.user.id
-    })
+    });
 
     await gamifiedTutorial.save();
-
+    console.log("gamified tutorial: "+gamifiedTutorial._id);
     module.tutorials.push(gamifiedTutorial._id);
     await module.save();
-    res.status(200).send({message:"gamified tutorial created successfully"});
+    res.status(200).send({message:"gamified tutorial created successfully",tutorial:gamifiedTutorial});
     }
     catch(err){
         res.status(500).send({message:err.message})
@@ -46,12 +47,12 @@ export const getTutorials = (req,res) => {
 // Update a tutorial
 export const updateTutorial = async (req, res) => {
     const tutorialId = req.params.tutorialID;
-    const { title, description, topic, difficulty } = req.body;
+    const { title, description} = req.body;
   
     try {
       const updatedTutorial = await GamifiedTutorial.findByIdAndUpdate(
         tutorialId,
-        { title, description, topic, difficulty },
+        { title, description},
         { new: true }
       );
   
@@ -68,7 +69,7 @@ export const updateTutorial = async (req, res) => {
   // Delete a tutorial
   export const deleteTutorial = async (req, res) => {
     const tutorialId = req.params.tutorialID;
-  
+    const moduleID = req.params.moduleID;
     try {
       const deletedTutorial = await GamifiedTutorial.findByIdAndRemove(tutorialId);
   
@@ -76,10 +77,9 @@ export const updateTutorial = async (req, res) => {
         return res.status(404).send({ message: 'Tutorial not found' });
       }
   
-      const moduleId = deletedTutorial.module; // Assuming the module ID is stored in the 'module' field of the GamifiedTutorial model
   
       const updatedModule = await Module.findByIdAndUpdate(
-        moduleId,
+        moduleID,
         { $pull: { tutorials: tutorialId } },
         { new: true }
       );

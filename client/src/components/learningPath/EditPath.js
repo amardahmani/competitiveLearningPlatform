@@ -7,6 +7,13 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 const EditPath = () => {
 
   const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+
+
+  const handleClick = () => {
+
+  }
+
+  
   return (
     <Card
         variant="outlined"

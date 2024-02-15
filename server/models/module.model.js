@@ -10,7 +10,7 @@ const ModuleSchema = mongoose.Schema({
     image: {
         type:String
     },
-    tutorials: {type: mongoose.Schema.Types.ObjectId, ref: 'GamifiedCourse'},
+    tutorials: [{type: mongoose.Schema.Types.ObjectId, ref: 'GamifiedTutorial'}],
     problems:[{type: mongoose.Schema.Types.ObjectId,ref:'Algorithmic'}],
     creator: {type:mongoose.Schema.Types.ObjectId, ref:"User"}
 })

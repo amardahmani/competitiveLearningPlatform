@@ -1,5 +1,3 @@
-import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
 import React, { useState } from 'react';
 import {
   Box,
@@ -15,8 +13,10 @@ import Dropzone,{useDropzone} from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { deletePath } from '../../services/path.service';
-const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
+import { deletePath, updatePath } from '../../services/path.service';
+import { toast } from 'react-toastify';
+
+const UpdateDialog = ({ open, handleClose, title, description, moduleID,pathID,setPaths }) => {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
   const [image, setImage] = useState(null);
@@ -36,11 +36,43 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
   
 
   const handleUpdate = () => {
-    // Handle the update logic here with the updated title, description, and image.
-    // You can access the updated values from the state variables: updatedTitle, updatedDescription, and image.
-    // Perform your update operation, e.g., API call, database update, etc.
-    // After the update is complete, close the dialog.
-    handleClose();
+    
+
+    const formData = new FormData();
+  
+    formData.append("title", updatedTitle);
+    formData.append("description", updatedDescription);
+  
+    if (image) {
+      formData.append("image", image);
+    }
+    
+    updatePath(formData,pathID).then((reponse) => {
+      
+      toast('path updated successfully!', {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      
+      setPaths((prevPaths) => {
+        // Assuming your paths state is an array and you want to update a specific path
+        const updatedPaths = prevPaths.map((path) => {
+          if (path._id === pathID) {
+            // Update the specific path object
+            return { ...path, title: updatedTitle, description: updatedDescription,image: image ? URL.createObjectURL(image) : path.image, };
+          }
+          return path;
+        });
+        return updatedPaths;
+      });
+      handleClose();
+      
+    }).catch((err) => {
+      console.log(err)
+    })
+
+    
   };
 
   return (
@@ -80,7 +112,7 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
         <Button onClick={handleClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleUpdate} color="primary" disabled={!updatedTitle || !updatedDescription}>
+        <Button onClick={handleUpdate} variant='contained' disabled={!updatedTitle || !updatedDescription}>
           Update
         </Button>
       </DialogActions>
@@ -89,11 +121,20 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
 };
 
 
+const deleteDialog = (props) => {
+
+
+  return (
+    <Dialog>
+
+    </Dialog>
+  );
+}
+
 const MoreUD = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const {title,description,pathID} = props;
+  const {title,description,pathID,setPaths} = props;
   const [openUpdate,setOpenUpdate] = useState(false);
-
   const handleOpenUpdate = () => {
     setOpenUpdate(true);
   }
@@ -121,7 +162,7 @@ const MoreUD = (props) => {
   
   return (
     <Box>
-      <Box sx={{ marginTop: '0px', position: 'relative', right: '0px', top: '0px' }}>
+      <Box sx={{ marginTop: '0px', position: 'relative', right: '15px', top: '0px' }}>
         <Button variant="outlined" sx={{ marginRight: '5px' }} size="small" onClick={handleOpen}>
           <MoreVertIcon />
         </Button>
@@ -130,7 +171,7 @@ const MoreUD = (props) => {
         <MenuItem onClick={handleOpenUpdate}>Update</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
         <UpdateDialog open={openUpdate} handleClose={handleCloseUpdate}
-        title={title} description={description}/>
+        title={title} description={description} pathID={pathID} setPaths={setPaths}/>
       </Menu>
     </Box>
   );

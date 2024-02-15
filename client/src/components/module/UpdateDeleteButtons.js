@@ -14,9 +14,13 @@ import {
 } from '@mui/material';
 import Dropzone,{useDropzone} from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { deleteModule } from '../../services/module.service';
+import { deleteModule, updateModule } from '../../services/module.service';
+import { useParams } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
+
+
+const UpdateDialog = ({ open, handleClose, title, description, moduleID,setModules,pathID }) => {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
   const [image, setImage] = useState(null);
@@ -36,11 +40,30 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
   
 
   const handleUpdate = () => {
-    // Handle the update logic here with the updated title, description, and image.
-    // You can access the updated values from the state variables: updatedTitle, updatedDescription, and image.
-    // Perform your update operation, e.g., API call, database update, etc.
-    // After the update is complete, close the dialog.
-    handleClose();
+    const formData = new FormData();
+    formData.append('title',updatedTitle);
+      formData.append('description',updatedDescription);
+      formData.append('image',image);
+
+      updateModule(pathID,moduleID,formData).then((response) => {
+        let updatedModule = {_id:response.data._id,title:response.data.title,image:response.data.image,description:response.data.description};
+        setModules((prevModules) => {
+          const updatedModules = prevModules.map((module) => {
+            return module._id === updatedModule._id ? updatedModule : module;
+          });
+          return updatedModules;
+        });
+        console.log(response);
+        toast("module updated successfully", {
+          type: 'success',
+          autoClose: true,
+          position: 'top-right',
+        });
+        handleClose();
+      }).then((err) => {
+        console.log(err);
+      })
+    
   };
 
   return (
@@ -92,12 +115,19 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID }) => {
 
 
 const UpdateDeleteButtons = (props) => {
-
-  const {moduleID,description,title} = props;
+  const {moduleID,description,title,setModules,pathID} = props;
   const [open,setOpen] = useState(false);
   const handleDelete = () => {
-    deleteModule(moduleID).then((response) => {
-      console.log(response.data);
+    deleteModule(pathID,moduleID).then((response) => {
+      toast('Your  has been created successfully!', {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      setModules((prevModules) => {
+        const updatedModules = prevModules.filter((module) => module._id !== moduleID);
+        return updatedModules;
+      });
     }).catch((err) => {
       console.log(err);
     })
@@ -120,7 +150,9 @@ const UpdateDeleteButtons = (props) => {
           onClick={handleOpen}><CreateIcon /></Button>
           <UpdateDialog open={open}
           handleClose={handleClose}
+          pathID={pathID}
           title={title}
+          setModules={setModules}
           description={description}
           moduleID={moduleID}/>
     </Box>

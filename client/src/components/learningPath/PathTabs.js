@@ -1,16 +1,41 @@
-import { Box, Tab } from '@mui/material'
-import React from 'react'
+import { Box, Button, Dialog, DialogContent, DialogTitle, Tab, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import ListQuestions from './ListQuestions';
+import { pushAlgorithmicModule } from '../../services/module.service';
+import ListAlgorithmic from '../questions/algorithmic/ListAlgorithmic';
+
+
 const PathTabs = (props) => {
-    const {Algorithmic,ButtonTutorial} = props;
-    const [value, setValue] = React.useState('1');
+  const { ButtonTutorial,tutorials,moduleID,setTutorials,TutorialUpdateDelete,QuestionLibrary,
+  algorithmicQuestions,setAlgorithmicQuestions,ListAlgorithmic } = props;
+  const [value, setValue] = React.useState('1');
+
+
+  const [openLibrary,setOpenLibrary] = useState(false);
+
+  const handleOpenLibrary = () => {
+    setOpenLibrary(true);
+  }
+
+  const handleCloseLibrary = () => {
+    setOpenLibrary(false);
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+
+  const addAlgorithmicQuestion = (algorithmicQuestions,problem) => {
+    setAlgorithmicQuestions([...algorithmicQuestions, problem]);
+  }
+
+  const pushAlgorithmicQuestion = (moduleID,questionID) => {
+    return pushAlgorithmicModule(moduleID,questionID);
+  }
+
 
   return (
     <Box sx={{ width: '70%', typography: 'body1' }}>
@@ -22,14 +47,62 @@ const PathTabs = (props) => {
           </TabList>
         </Box>
         <TabPanel value="1">
-        {ButtonTutorial && <ButtonTutorial />}
+          {ButtonTutorial && <ButtonTutorial moduleID={moduleID} setTutorials={setTutorials}/>}
+            <TableContainer sx={{width:"70%"}}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>
+                      TITLE
+                    </TableCell>
+                    <TableCell>
+                      ACTIONS
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tutorials && tutorials.map((tutorial) => (
+                    <TableRow key={tutorial._id}>
+                      <TableCell>{tutorial.title}</TableCell>
+                      {TutorialUpdateDelete && (
+                            <TutorialUpdateDelete  
+                            tutorial={tutorial}
+                            moduleID={moduleID}
+                            setTutorials={setTutorials}/>
+                        )}
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          
         </TabPanel>
         <TabPanel value="2">
-          {Algorithmic && <Algorithmic />}
+          
+          {QuestionLibrary && (
+            <Button variant='contained' onClick={handleOpenLibrary}>New Problem</Button>
+            
+          )}
+          <QuestionLibrary 
+            open={openLibrary}
+            handleCloseLibrary={handleCloseLibrary}
+            algorithmicQuestions={algorithmicQuestions}
+            pushAlgorithmicQuestion={pushAlgorithmicQuestion}
+            addAlgorithmicQuestion={addAlgorithmicQuestion}
+            eventID={moduleID}
+          />
+
+          {ListAlgorithmic &&  (
+            <ListAlgorithmic 
+            algorithmicQuestions={algorithmicQuestions}
+            />
+          )}
+          
+
         </TabPanel>
       </TabContext>
     </Box>
-  )
-}
+  );
+};
 
-export default PathTabs
+export default PathTabs;

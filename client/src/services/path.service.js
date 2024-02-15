@@ -14,6 +14,14 @@ export const getPaths = () => {
     return axios.get(API_URL);
 }
 
+export const updatePath = (data,pathID) => {
+  return axios.put(API_URL+'/'+pathID,data,{
+    headers:{
+    'Content-Type': 'application/json',       
+    }
+  })
+}
+
 export const createPath = (data) => {
     return axios.post(API_URL,data,config)
 }

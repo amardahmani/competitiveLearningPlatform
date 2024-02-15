@@ -2,10 +2,10 @@ import { Box, Button } from '@mui/material'
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
-const LearnMore = ({pathID}) => {
+const LearnMore = ({pathID,setPaths}) => {
     console.log(pathID)
     const navigate = useNavigate();
-
+    console.log("setPatjs o, learn more",setPaths)
     const handleClick = () => {
         navigate(pathID)
     }

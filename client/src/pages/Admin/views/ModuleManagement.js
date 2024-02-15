@@ -96,8 +96,8 @@ const ModuleManagementAdmin = () => {
     }
   return (
     <Box>
-        <Button onClick={handleOpen} variant="outlined">new Module</Button>
-        <CreateModule open={open} handleClose={handleClose} pathID={params.pathID}/>
+        <Button onClick={handleOpen} variant="contained" sx={{marginLeft:"15px"}}>new Module</Button>
+        <CreateModule open={open} handleClose={handleClose} pathID={params.pathID} setModules={setModules}/>
 
         <Box display='flex' flexDirection='column'>
           <Box flex='1'>
@@ -105,15 +105,18 @@ const ModuleManagementAdmin = () => {
           {modules && modules.map((module) => (
             <ModuleCard key={module._id} 
             title={module.title}
+            pathID={params.pathID}
+            setModules={setModules}
             buttonDescription={module.description}
             moduleID={module._id}
-            buttons={UpdateDeleteButtons} />
+            UpdateDeleteButtons={UpdateDeleteButtons} />
           ))}
           </Box>
           <Box flex='1'>
-            <EditModule />
+            
+          <Button variant='contained' onClick={handleOpenCreate} sx={{marginLeft:"10px"}}>Add a new instructor</Button>
             <Card width="100%">
-              <Button variant='contained' onClick={handleOpenCreate}>Add a new instructor</Button>
+              
               <Instructors instructors={savedInstructors} nonInstructors={instructors}
               handleDelete={handleDelete}/>
               <AddInstructorDialog open={openCreate} 

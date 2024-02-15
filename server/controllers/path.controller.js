@@ -29,7 +29,7 @@ export const getAllPaths = (req,res) => {
 
 export const updatePath = (req, res) => {
     const { title, description } = req.body;
-    const pathId = req.params.id;
+    const pathId = req.params.pathID;
     const updatedFields = { title, description };
   
     if (req.file) {
