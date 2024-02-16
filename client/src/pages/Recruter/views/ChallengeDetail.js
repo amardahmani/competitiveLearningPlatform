@@ -87,7 +87,7 @@ const ChallengeDetailRecruiter = (props) => {
               },
             }}
           >
-              <ListAlgorithmic challengeID={challengeID} 
+              <ListAlgorithmic eventID={challengeID} 
               algorithmicQuestions={algorithmicQuestions}
               handleSubmit={handleSubmit}
               />

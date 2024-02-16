@@ -51,6 +51,31 @@ export const pushAlgorithmicQuestion = async (req,res) => {
   }
 }
 
+export const dropAlgorithmicQuestion = async (req, res) => {
+  const {moduleID,questionID} = req.params;
+  
+  try {
+    const module = await Module.findById(moduleID);
+
+    if (!module) {
+      return res.status(404).send({ message: "Module not found" });
+    }
+
+    const index = module.problems.indexOf(questionID);
+    if (index === -1) {
+      return res.status(404).send({ message: "Question not found in the module" });
+    }
+
+    module.problems.splice(index, 1);
+
+    await module.save();
+
+    return res.status(200).send({ message: "Question removed from module successfully" });
+  } catch (err) {
+    return res.status(500).send({ message: err.message });
+  }
+};
+
 export const getAlgorithmicQuestions = async (req,res) => {
   const moduleID = req.params.moduleID;
 

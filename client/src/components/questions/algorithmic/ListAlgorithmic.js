@@ -5,7 +5,7 @@ import { getCurrentUser } from '../../../services/auth.service';
 
 const ListAlgorithmic = (props) => {
   const {algorithmicQuestions,setAlgorithmicQuestions,DeleteUpdateAlgorithmic,DropAlgorithmic,
-  challengeID,handleDropAlgorithmic} = props;
+  eventID,handleDropAlgorithmic} = props;
   
   const currentUser = getCurrentUser();
 
@@ -46,7 +46,7 @@ const ListAlgorithmic = (props) => {
                     )}
                     {DropAlgorithmic && (
                       <DropAlgorithmic questionID={question._id} 
-                      eventID={challengeID}
+                      eventID={eventID}
                       handleDropAlgorithmic={handleDropAlgorithmic}/>
                     )}
                   </TableCell>

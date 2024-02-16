@@ -3,13 +3,14 @@ import React, { useState } from 'react';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import { pushAlgorithmicModule } from '../../services/module.service';
+import { dropAlgorithmicModule, pushAlgorithmicModule } from '../../services/module.service';
 import ListAlgorithmic from '../questions/algorithmic/ListAlgorithmic';
+import DropAlgorithmic from '../questions/algorithmic/Buttons/DropAlgorithmic';
 
 
 const PathTabs = (props) => {
   const { ButtonTutorial,tutorials,moduleID,setTutorials,TutorialUpdateDelete,QuestionLibrary,
-  algorithmicQuestions,setAlgorithmicQuestions,ListAlgorithmic } = props;
+  algorithmicQuestions,setAlgorithmicQuestions,ListAlgorithmic,DropAlgorithmic,handleDropAlgorithmic } = props;
   const [value, setValue] = React.useState('1');
 
 
@@ -91,10 +92,13 @@ const PathTabs = (props) => {
             addAlgorithmicQuestion={addAlgorithmicQuestion}
             eventID={moduleID}
           />
-
+          
           {ListAlgorithmic &&  (
             <ListAlgorithmic 
             algorithmicQuestions={algorithmicQuestions}
+            DropAlgorithmic={DropAlgorithmic}
+            eventID={moduleID}
+            handleDropAlgorithmic={handleDropAlgorithmic}
             />
           )}
           

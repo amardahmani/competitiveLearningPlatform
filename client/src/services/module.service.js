@@ -39,6 +39,15 @@ export const pushAlgorithmicModule = (moduleID,formData) => {
   });
 }
 
+export const dropAlgorithmicModule = (moduleID,questionID) => {
+  return axios.delete(API_URL+'/'+moduleID+'/questions/'+questionID,{
+    headers:{
+      'Content-Type': 'application/json',
+    ...authHeader()
+    }
+  });
+}
+
 export const getAlgorithmicModule = (moduleID) => {
   return axios.get(API_URL+'/'+moduleID+'/questions',{
     headers:{...authHeader()}
