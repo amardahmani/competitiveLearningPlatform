@@ -121,13 +121,36 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID,pathID,s
 };
 
 
-const deleteDialog = (props) => {
-
-
+const DeletePathModal = (props) => {
+  const {open,handleClose,setPaths,pathID} = props;
+  console.log(pathID)
+  const handleDelete = () => {
+    deletePath(pathID).then((response) => {
+      setPaths((prevPaths) =>
+          prevPaths.filter((p) => p._id !== pathID)
+          );
+      toast(response.data.message, {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      console.log(response);
+    }).catch((err) => {
+      console.log(err);
+    })
+  }
   return (
-    <Dialog>
-
-    </Dialog>
+    <Box>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          <Typography variant="h3">Do you want to delete you job</Typography>
+        </DialogTitle>
+        <DialogActions>
+          <Button onClick={handleDelete} variant='contained'>Confirm</Button>
+          <Button onClick={handleClose} variant='outlined'>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 }
 
@@ -135,12 +158,22 @@ const MoreUD = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const {title,description,pathID,setPaths} = props;
   const [openUpdate,setOpenUpdate] = useState(false);
+  const [openDelete,setOpenDelete] = useState(false);
+
   const handleOpenUpdate = () => {
     setOpenUpdate(true);
   }
 
   const handleCloseUpdate = () => {
     setOpenUpdate(false);
+  }
+
+  const handleOpenDelete = () => {
+    setOpenDelete(true);
+  }
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
   }
 
   const handleOpen = (event) => {
@@ -151,13 +184,7 @@ const MoreUD = (props) => {
     setAnchorEl(null);
   };
 
-  const handleDelete = () => {
-    deletePath(pathID).then((response) => {
-      console.log(response);
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
+  
 
   
   return (
@@ -169,9 +196,11 @@ const MoreUD = (props) => {
       </Box>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <MenuItem onClick={handleOpenUpdate}>Update</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={handleOpenDelete}>Delete</MenuItem>
         <UpdateDialog open={openUpdate} handleClose={handleCloseUpdate}
         title={title} description={description} pathID={pathID} setPaths={setPaths}/>
+        <DeletePathModal open={openDelete} setPaths={setPaths} handleClose={handleCloseDelete}
+        pathID={pathID}/>
       </Menu>
     </Box>
   );

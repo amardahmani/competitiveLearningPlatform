@@ -1,6 +1,11 @@
 import Path from "../models/path.model.js";
 import User from "../models/user.model.js";
+import fs from 'fs';
+import path from "path";
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+import { fileURLToPath } from 'url';
 
 export const createPath = (req,res) => {
     const {title,description} = req.body;
@@ -63,9 +68,13 @@ export const updatePath = (req, res) => {
         }
         // Delete associated image file if necessary
         if (deletedPath.image) {
-          // Delete the image using appropriate method or library
-          // For example, if using fs module:
-          fs.unlinkSync(deletedPath.image);
+          const imagePath = path.join(__dirname, '../uploads/poster', deletedPath.image);
+          if (fs.existsSync(imagePath)) {
+            fs.unlinkSync(imagePath);
+            console.log(`Deleted image file: ${deletedPath.image}`);
+          } else {
+            console.log(`Image file not found: ${deletedPath.image}`);
+          }
         }
         res.status(200).send({ message: 'Path deleted successfully' });
       })
@@ -73,7 +82,6 @@ export const updatePath = (req, res) => {
         res.status(500).send({ message: err.message });
       });
   };
-
   export const getNonInstructors = async (req,res) => {
     const pathId = req.params.pathID;
 
