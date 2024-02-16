@@ -3,7 +3,7 @@ import ListAlgorithmic from '../../../components/questions/algorithmic/ListAlgor
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD'
 import ProblemSetters from '../../../components/Challenge/ProblemSetters'
 import { useLocation, useParams } from 'react-router-dom'
-import { getChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../../../services/challenge.service'
+import { dropAlgorithmic, getChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../../../services/challenge.service'
 import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
 import Instructors from '../../../components/tables/Instructors'
 import AddInstructorDialog from '../../../components/users/AddInstructorDialog'
@@ -13,6 +13,8 @@ import UpdateDeleteCard from '../../../components/Challenge/cards/UpdateDeleteCa
 import { createAlgorithmic } from '../../../services/questions.service'
 import { getCurrentUser } from '../../../services/auth.service'
 import { useEffect, useState } from 'react'
+import DropAlgorithmic from '../../../components/questions/algorithmic/Buttons/DropAlgorithmic'
+import { toast } from 'react-toastify'
 const ChallengeDetail = (props) => {
 
   const user = getCurrentUser();
@@ -87,6 +89,20 @@ const ChallengeDetail = (props) => {
 
   };
 
+  const handleDropAlgorithmic = (challengeID,questionID) => {
+    dropAlgorithmic(challengeID,questionID).then((response) => {
+      toast(response.data.message, {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+
+      setAlgorithmicQuestions((prevQuestions) =>
+        prevQuestions.filter((q) => q._id !== questionID)
+      );
+    }).catch((error) => {console.log(error)});
+  }
+
   useEffect(() => {
     const fetchData = async () => {
       try{
@@ -115,39 +131,12 @@ const ChallengeDetail = (props) => {
     return pushAlgorithmicChallenge(challengeID,questionID);
   }
 
-  const handleSubmit = async (values) => {
-    const formData = new FormData();
-    formData.append('title', values.title);
-    formData.append('description', values.description);
-    formData.append('difficulty', values.difficulty);
-    formData.append('points',values.points);
-    formData.append('input', values.input);
-    formData.append('expectedOutput', values.expectedOutput);
-    formData.append('creator',id);
-
-    createAlgorithmic(formData).then((response) => {
-      const problemId = response.data.algorithmic._id;
-      const challengeData = new FormData();
-      challengeData.append('challengeID',challengeID);
-      challengeData.append('problem',problemId);
-
-      pushAlgorithmicChallenge(challengeData).then((response) => {
-        console.log(response.data);
-      })
-    })
-  }
   return (
     <Box sx={{display:'flex',flexDirection:"row"}}>
           
     <Box width="70%">
-      <Button variant='contained' onClick={handleOpen}
-      sx={{marginLeft:"10px",marginRight:"10px"}}>New Question</Button>
-      Or   <Button sx={{marginLeft:"10px"}} variant='outlined' onClick={handleOpenLibrary}>Import Questions</Button>
-      <CreateAlgorithmic 
-      open={open} 
-      handleClose={handleClose}
-      handleSubmit={handleSubmit}
-      />
+      <Button sx={{marginLeft:"10px"}} variant='contained' onClick={handleOpenLibrary}>Import Questions</Button>
+      
 
       <QuestionLibrary
         open={openLibrary}
@@ -156,6 +145,7 @@ const ChallengeDetail = (props) => {
         algorithmicQuestions={algorithmicQuestions}
         addAlgorithmicQuestion={addAlgorithmicQuestion}
         pushAlgorithmicQuestion={pushAlgorithmicQuestion}
+        
         />
       <Card variant="outlined" sx={{width:"100%"}}>
         <CardContent>
@@ -170,8 +160,11 @@ const ChallengeDetail = (props) => {
             >
               
                 <ListAlgorithmic  algorithmicQuestions={algorithmicQuestions}
+                DropAlgorithmic={DropAlgorithmic}
+                eventID={challengeID}
+                handleDropAlgorithmic={handleDropAlgorithmic}
+                challengeID={challengeID}
                 />
-              
               
 
             </Box>

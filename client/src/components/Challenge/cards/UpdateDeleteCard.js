@@ -22,7 +22,7 @@ const DeleteChallengeModal = (props) => {
           className: 'toast--success',
           progressClassName: 'toast__progress--success',
         });
-        navigate('/recruiter/challenge');
+        navigate(`challenge`);
         handleClose();
       }).catch((err) => {
         console.log(err);

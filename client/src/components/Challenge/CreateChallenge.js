@@ -30,7 +30,7 @@ const initialValuesCreate = {
 }
 
 const CreateChallenge = (props) => {
-  const {setChallenges,challenges,open,handleClose} = props;
+  const {setChallenges,open,handleClose} = props;
   const user = getCurrentUser();
   const editorRef = useRef();
   const editorConfig = {
@@ -62,7 +62,6 @@ const CreateChallenge = (props) => {
     formData.append('poster',values.poster);
     createChallenge(formData).then((response) => {
         let challenge = {title:response.data.challenge.title,description:response.data.challenge.description,_id:response.data.challenge._id}
-        console.log(challenge)
         setChallenges(prevArray => [...prevArray, challenge]);
         console.log(response.data.challenge);
         toast.success('the challenge has been created Successfully', {

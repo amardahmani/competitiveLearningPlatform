@@ -7,36 +7,6 @@ import { getCurrentUser } from '../../../services/auth.service';
 import { createChallenge, getChallengesUser } from '../../../services/challenge.service';
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD';
 import { useNavigate } from 'react-router-dom';
-
-const CreationModal = ({open,handleOpen,handleClose,challenges}) => {
-    const user = getCurrentUser();
-    const handleCreateChallenge = async (values) => {
-    
-    }
-  return (
-    <Dialog  open={open} onClose={handleClose}  sx={{
-      "& .MuiDialog-container": {
-        "& .MuiPaper-root": {
-          width: "100%",
-          maxWidth: "1000px",  // Set your width here
-        },
-      },
-    }}>
-      <Box>
-      <DialogTitle sx={{marginTop:"5px"}}>
-        <Typography variant='h3' textAlign='center' color="primary.main">
-        Create a new challenge
-        </Typography>
-      </DialogTitle>
-      <Divider />
-      <DialogContent>
-      <CreateChallenge challenges={challenges}/>
-      </DialogContent>
-      </Box>
-    </Dialog>
-  )
-}
-  
  
 
 const ChallengeManagementInstructor = () => {
@@ -71,11 +41,12 @@ const ChallengeManagementInstructor = () => {
     <Box>
       
         <Button onClick={handleOpen} variant='contained' sx={{marginLeft:"20px"}}>New Challenge</Button>
-        <CreationModal open={open} handleOpen={handleOpen} 
-        handleClose={handleClose} challenges={challenges}/>
       <Box mt={4} display='flex' flexDirection="row">
           <Grid container spacing={1}>
-          
+          <CreateChallenge 
+          open={open}
+          handleClose={handleClose}
+          setChallenges={setChallenges}/>
         {challenges && challenges.map((challenge) => (
           <Grid item md={4} xs={12}>
           <ChallengeCardUD 

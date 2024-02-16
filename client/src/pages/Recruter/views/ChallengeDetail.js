@@ -28,8 +28,6 @@ const ChallengeDetailRecruiter = (props) => {
     fetchData()
   },[])
   const {algorithmicQuestions} = questions;
-  console.log(algorithmicQuestions)
-
 
   const handleSubmit = (values) => {
     const formData = new FormData();

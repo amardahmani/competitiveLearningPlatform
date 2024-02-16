@@ -1,5 +1,5 @@
 import express from 'express'
-import { createChallenge, deleteChallenge, getChallenge, getChallengeQuestions, getChallengesPlanned, getChallengesUser, getInstructors, getNonInstructors, getUnplannedChallenges, joinAlgorithmic, pushAlgorithmicChallenge, pushInstructor, removeInstructor, updateChallenge } from '../controllers/challenge.controller.js'
+import { createChallenge, deleteChallenge, dropAlgorithmicChallenge, getChallenge, getChallengeQuestions, getChallengesPlanned, getChallengesUser, getInstructors, getNonInstructors, getUnplannedChallenges, joinAlgorithmic, pushAlgorithmicChallenge, pushInstructor, removeInstructor, updateChallenge } from '../controllers/challenge.controller.js'
 import { posterUpload } from '../middleware/upload.js';
 import { verifyToken } from '../middleware/authJwt.js';
 const router = express.Router()
@@ -18,4 +18,5 @@ router.get('/:challengeID/Noninstructors',getNonInstructors);
 router.get('/:challengeID/instructors',getInstructors);
 router.post('/:challengeID/add',pushInstructor);
 router.delete('/:challengeID/delete/:instructorID',removeInstructor);
+router.delete('/:challengeID/:questionID',dropAlgorithmicChallenge);
 export default router;

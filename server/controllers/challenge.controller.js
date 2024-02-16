@@ -40,6 +40,33 @@ export const createChallenge = async (req,res) => {
   }
   }
 
+  export const dropAlgorithmicChallenge = async (req, res) => {
+    const { challengeID,questionID } = req.params;
+    try {
+      const challenge = await Challenge.findOne({ _id: challengeID });
+      const algorithmic = await Algorithmic.findOne({ _id: questionID });
+  
+      if (!challenge) {
+        return res.status(404).send({ message: "Challenge not found" });
+      }
+  
+      if (!algorithmic) {
+        return res.status(404).send({ message: "Algorithmic question not found" });
+      }
+  
+      const index = challenge.algorithmicQuestions.indexOf(questionID);
+      if (index === -1) {
+        return res.status(404).send({ message: "Algorithmic question not found in challenge" });
+      }
+  
+      challenge.algorithmicQuestions.splice(index, 1);
+      await challenge.save();
+      res.status(200).send({ message: "Algorithmic question dropped successfully" });
+    } catch (err) {
+      res.status(500).send({ message: err.message });
+    }
+  }
+
 export const pushAlgorithmicChallenge = async (req,res) => {
   const {challengeID} = req.params;
   const {questionID} = req.body;
