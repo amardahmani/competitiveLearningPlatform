@@ -8,6 +8,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { useNavigate } from 'react-router-dom';
 import { deleteChallenge } from '../../../services/challenge.service';
 import { toast } from 'react-toastify';
+import { getCurrentUser } from '../../../services/auth.service';
 
 
 
@@ -15,6 +16,7 @@ const DeleteChallengeModal = (props) => {
 
     const navigate = useNavigate();
     const {challengeID,open,handleClose} = props;
+    const role = getCurrentUser().role;
     const handleDelete = () => {
       deleteChallenge(challengeID).then(() => {
         toast.success('the challenge has been deleted Successfully', {
@@ -22,7 +24,10 @@ const DeleteChallengeModal = (props) => {
           className: 'toast--success',
           progressClassName: 'toast__progress--success',
         });
-        navigate(`challenge`);
+        const redirectPath = role === 'INSTRUCTOR'
+        ? '/instructor/challenge'
+        : '/recruiter/challenges'; // Different redirect for different roles
+        navigate(redirectPath);
         handleClose();
       }).catch((err) => {
         console.log(err);
