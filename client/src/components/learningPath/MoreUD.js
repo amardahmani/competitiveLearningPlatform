@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Box,
   Dialog,
@@ -15,14 +15,19 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { deletePath, updatePath } from '../../services/path.service';
 import { toast } from 'react-toastify';
-
-const UpdateDialog = ({ open, handleClose, title, description, moduleID,pathID,setPaths }) => {
+const UpdateDialog = ({ open, handleClose, title, description, pathID, setPaths }) => {
   const [updatedTitle, setUpdatedTitle] = useState(title);
   const [updatedDescription, setUpdatedDescription] = useState(description);
   const [image, setImage] = useState(null);
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => handleDrop(acceptedFiles),
+    accept: 'image/*', // Specify accepted file types
+    multiple: false, // Allow only single file to be dropped
+  });
+
   const handleDrop = (acceptedFiles) => {
     setImage(acceptedFiles[0]);
+    console.log(acceptedFiles[0]);
   };
 
   const handleTitleChange = (event) => {
@@ -33,48 +38,43 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID,pathID,s
     setUpdatedDescription(event.target.value);
   };
 
-  
-
   const handleUpdate = () => {
-    
-
     const formData = new FormData();
-  
-    formData.append("title", updatedTitle);
-    formData.append("description", updatedDescription);
-  
+    formData.append('title', updatedTitle);
+    formData.append('description', updatedDescription);
     if (image) {
-      formData.append("image", image);
+      formData.append('image', image);
     }
-    
-    updatePath(formData,pathID).then((reponse) => {
-      
-      toast('path updated successfully!', {
-        type: 'success',
-        autoClose: true,
-        position: 'top-right',
-      });
-      
-      setPaths((prevPaths) => {
-        // Assuming your paths state is an array and you want to update a specific path
-        const updatedPaths = prevPaths.map((path) => {
-          if (path._id === pathID) {
-            // Update the specific path object
-            return { ...path, title: updatedTitle, description: updatedDescription,image: image ? URL.createObjectURL(image) : path.image, };
-          }
-          return path;
+
+    updatePath(formData, pathID)
+      .then((response) => {
+        toast('Path updated successfully!', {
+          type: 'success',
+          autoClose: true,
+          position: 'top-right',
         });
-        return updatedPaths;
+
+        // Update paths state
+        setPaths((prevPaths) => {
+          const updatedPaths = prevPaths.map((path) => {
+            if (path._id === pathID) {
+              // Update the specific path object
+              return { ...path, title: updatedTitle, description: updatedDescription, image: response.data.image };
+            }
+            return path;
+          });
+          return updatedPaths;
+        });
+
+        handleClose();
+      })
+      .catch((err) => {
+        console.log(err);
       });
-      handleClose();
-      
-    }).catch((err) => {
-      console.log(err)
-    })
-
-    
   };
-
+  useEffect(() => {
+    console.log(image); // Check if image state is properly updated
+  }, [image]);
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogTitle>Update Dialog</DialogTitle>
@@ -95,30 +95,31 @@ const UpdateDialog = ({ open, handleClose, title, description, moduleID,pathID,s
           rows={4}
           margin="normal"
         />
-        <Box {...getRootProps()} p={2} sx={{ border: '1px solid', borderColor: 'secondary.main',borderRadius:'5px' }}>
-            <input {...getInputProps()} />
-            
-            {!acceptedFiles.length ? (
-              <Typography color='secondary'>Add image here</Typography>
-            ) : (
-              <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
-                <Typography>{acceptedFiles[0].name}</Typography>
-                <EditOutlinedIcon />
-              </Box>
-            )}
-          </Box>
+        <Box {...getRootProps()} p={2} sx={{ border: '1px solid', borderColor: 'secondary.main', borderRadius: '5px' }}>
+          <input {...getInputProps()} />
+
+          {!acceptedFiles.length ? (
+            <Typography color="secondary">Drop an image here or click to select one</Typography>
+          ) : (
+            <Box display="flex" justifyContent="space-between" alignItems="center" p={1}>
+              <Typography>{acceptedFiles[0].name}</Typography>
+              <EditOutlinedIcon />
+            </Box>
+          )}
+        </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleUpdate} variant='contained' disabled={!updatedTitle || !updatedDescription}>
+        <Button onClick={handleUpdate} variant="contained" disabled={!updatedTitle || !updatedDescription}>
           Update
         </Button>
       </DialogActions>
     </Dialog>
   );
 };
+
 
 
 const DeletePathModal = (props) => {

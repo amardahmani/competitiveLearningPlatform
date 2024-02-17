@@ -2,18 +2,16 @@ import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia,
 import React, { useState } from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 import image from '../../assets/image.png'
-import VisibilityIcon from '@mui/icons-material/Visibility';
 import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 const ChallengeCardUD = (props) => {
-    const {title,duration,challengeID,description} = props;
-
+    const {title,duration,challengeID,description,image} = props;
     const [hover, setHover] = useState(false);
+    const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
     const navigate = useNavigate();
     const handleMouseEnter = () => {
       setHover(true);
     }
-
     const handleMouseLeave = () => {
       setHover(false);
     }
@@ -34,7 +32,7 @@ const ChallengeCardUD = (props) => {
           
           <CardMedia
             component="img"
-            image={image}
+            image={fileUrl}
             alt="Example Image"
             sx={{
                 position: 'absolute',
@@ -50,7 +48,6 @@ const ChallengeCardUD = (props) => {
           <CardContent>
             <Typography variant="h5">{title} </Typography>
           </CardContent>
-          
           </Box>
           </CardActionArea>
         </Card>

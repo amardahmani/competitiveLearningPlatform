@@ -4,8 +4,10 @@ import image from '../../assets/image.png'
 
 import { useNavigate } from 'react-router-dom';
 const JobCard = (props) => {
-    const {title,duration,jobID,description,country} = props;
+    const {title,duration,jobID,description,country,poster} = props;
     const data = {title,duration,description,jobID,country}
+    const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
+
     const [hover, setHover] = useState(false);
     const navigate = useNavigate();
     const handleMouseEnter = () => {
@@ -32,7 +34,7 @@ const JobCard = (props) => {
           
           <CardMedia
             component="img"
-            image={image}
+            image={fileUrl}
             alt="Example Image"
             sx={{
                 position: 'absolute',

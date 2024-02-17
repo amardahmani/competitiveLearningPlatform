@@ -174,6 +174,7 @@ const CreateChallenge = (props) => {
           </FormControl>
                 <TextField
                   label="duration"
+                  type='number'
                   onBlur={handleBlur}
                   onChange={handleChange}
                   value={values.duration}

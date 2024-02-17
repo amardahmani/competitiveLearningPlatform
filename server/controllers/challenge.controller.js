@@ -2,6 +2,7 @@ import Algorithmic from "../models/algorithmic.model.js";
 import Challenge from "../models/challenge.model.js";
 import Plannification from "../models/plannification.model.js";
 import mongoose from "mongoose";
+import path from 'path';
 import User from "../models/user.model.js";
 export const createChallenge = async (req,res) => {
     const{title,description,duration,type,id} = req.body;
@@ -124,13 +125,24 @@ export const getUnplannedChallenges = async (req, res) => {
   }
 };
 
-export const getChallengesUser = (req,res) => {
-  Challenge.find({creator:req.user.id}).then((data) => {
-    res.status(200).send(data);
-  }).catch((err) => {
-    res.status(500).send({message:err.message});
-  })
-}
+export const getChallengesUser = (req, res) => {
+  Challenge.find({ creator: req.user.id })
+      .exec()
+      .then(challenges => {
+          // Map challenges to include posterImagePath
+          const challengesWithImagePath = challenges.map(challenge => {
+              const imagePath = challenge.poster ? path.join('/uploads/poster', challenge.poster) : null;
+              return {
+                  ...challenge._doc,
+                  posterImagePath: imagePath
+              };
+          });
+          res.status(200).send(challengesWithImagePath);
+      })
+      .catch(err => {
+          res.status(500).send({ message: err.message });
+      });
+};
 export const getChallengesPlanned = async (req,res) => {
   try {
     const plannifications = await Plannification.find({ type: 'Challenge' }).populate('event', 'title').lean();

@@ -36,7 +36,7 @@ export const updatePath = (req, res) => {
     const { title, description } = req.body;
     const pathId = req.params.pathID;
     const updatedFields = { title, description };
-  
+    console.log(req.file);
     if (req.file) {
       updatedFields.image = req.file.filename;
     }

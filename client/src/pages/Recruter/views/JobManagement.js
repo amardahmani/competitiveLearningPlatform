@@ -46,6 +46,7 @@ const JobManagement = () => {
           title={job.title}
           description={job.description}
           jobID={job._id}
+          poster={job.poster}
           country={job.country}/>
         </Grid>
         ))}

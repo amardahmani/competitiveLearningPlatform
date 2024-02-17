@@ -17,7 +17,7 @@ export const getPaths = () => {
 export const updatePath = (data,pathID) => {
   return axios.put(API_URL+'/'+pathID,data,{
     headers:{
-    'Content-Type': 'application/json',       
+    'Content-Type': 'multipart/form-data',       
     }
   })
 }

@@ -97,19 +97,14 @@ const NewPlannification = (props) => {
     const startDate = values.startDate;
     const timeStamps = startDate.valueOf();
     const selectedEvent = filteredEvents.find((event) => event._id === id);
-  let duration = selectedEvent.duration;
-  let title = selectedEvent.title;
-    if(duration.endsWith('d')){
-      const days = parseInt(duration);
-      duration = days * 24 * 60 * 60 * 1000;
-    }
-    else{
-      const hours = parseInt(duration);
-      duration = hours * 60 * 60 * 1000; 
-    }
+    let duration = selectedEvent.duration;
+    let title = selectedEvent.title;
+    const hours = parseInt(duration);
+    duration = hours * 60 * 60 * 1000; 
     const endDate = new Date(timeStamps+duration);
     const formattedStartDate = dayjs(startDate).format('YYYY-MM-DDTHH:mm:ss');
-    const newEvent = {id:id,start:formattedStartDate,end:endDate,title:title}
+    const formattedEndDate = dayjs(endDate).format('YYYY-MM-DDTHH:mm:ss');
+    const newEvent = {id:id,start:formattedStartDate,end:formattedEndDate,title:title}
     addEvent(newEvent);
 
     const formData = new FormData();
@@ -226,7 +221,6 @@ const Calendar = () => {
     const [planned,setPlanned] = useState([]);
     const addEvent = (newEvent) => {
       setEvents((prevEvents) => [...prevEvents, newEvent]);
-      console.log(events);
     };
 
 

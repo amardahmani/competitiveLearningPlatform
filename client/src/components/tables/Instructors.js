@@ -50,10 +50,7 @@ const Instructors = (props) => {
                   fontSize: "15px",
                   fontWeight: "500",
                 }}>{instructor.email}</Typography></TableCell>
-                  <TableCell><Typography sx={{
-                  fontSize: "15px",
-                  fontWeight: "500",
-                }}>{instructor.email}</Typography></TableCell>
+                  
                   <TableCell>
                     <Box pl={2} alignItems="center">
                       <Button color='danger' onClick={() => handleDelete(instructor)}><DeleteIcon /></Button>

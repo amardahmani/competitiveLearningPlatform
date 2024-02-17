@@ -21,7 +21,6 @@ const ChallengeManagementInstructor = () => {
       const fetchData = async () => {
         try{
           const response = await getChallengesUser();
-          console.log(response.data);
           setChallenges(response.data);
         }catch(error){
           console.log();
@@ -52,7 +51,8 @@ const ChallengeManagementInstructor = () => {
           <ChallengeCardUD 
           key={challenge._id}
           title={challenge.title}
-          challengeID={challenge._id}/>
+          challengeID={challenge._id}
+          image={challenge.poster}/>
         </Grid>
         ))}
           
