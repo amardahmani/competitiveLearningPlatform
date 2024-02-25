@@ -191,29 +191,37 @@ export const getChallengeQuestions = async (req,res) => {
 
 // Update a challenge
 export const updateChallenge = async (req, res) => {
-  const challengeId = req.params.challengeID;
+  const { challengeID } = req.params; // Assuming you are passing the challenge ID in the URL
   const { title, description, duration, type } = req.body;
-
+  
   try {
-    const updatedChallenge = await Challenge.findByIdAndUpdate(
-      challengeId,
-      { title, description, duration, type },
-      { new: true }
-    );
+      const challenge = await Challenge.findById(challengeID);
 
-    if (!updatedChallenge) {
-      return res.status(404).send({ message: 'Challenge not found' });
-    }
+      if (!challenge) {
+          return res.status(404).send({ message: "Challenge not found" });
+      }
 
-    res.status(200).send(updatedChallenge);
+      // Update challenge fields
+      challenge.title = title;
+      challenge.description = description;
+      challenge.duration = duration;
+
+      // If there's a new poster uploaded, update the poster field
+      if (req.file) {
+          challenge.poster = req.file.filename;
+      }
+
+      await challenge.save();
+
+      return res.status(200).send({ message: "Challenge updated successfully", challenge });
   } catch (err) {
-    res.status(500).send({ message: err.message });
+      return res.status(500).send({ message: err.message });
   }
 };
-
 // Delete a challenge
 export const deleteChallenge = async (req, res) => {
   const challengeId = req.params.challengeID;
+  console.log(challengeId);
 
   try {
     const deletedChallenge = await Challenge.findByIdAndRemove(challengeId);

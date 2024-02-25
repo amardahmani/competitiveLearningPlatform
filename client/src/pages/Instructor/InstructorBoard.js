@@ -10,6 +10,7 @@ import QuizIcon from '@mui/icons-material/Quiz';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import RouteIcon from '@mui/icons-material/Route';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import ChallengesProvider from '../../hooks/ChallengesContext'
 
 const InstructorBoard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -19,7 +20,7 @@ const InstructorBoard = () => {
   const Menuitems  = [
     {
       title:"dashboard",
-      href:"/instructor/dahsboard",
+      href:"/instructor/dashboard",
       icon:DashboardIcon
     },
     {
@@ -80,7 +81,9 @@ const InstructorBoard = () => {
           paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "",
         }}>
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+            <ChallengesProvider>
             <Outlet />
+            </ChallengesProvider>
           </Box>
         </Container>
       </Box>

@@ -7,6 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import { ThemeProvider } from '@mui/material';
 import { baseTheme } from './Theme-variable';
 import { ToastContainer, toast } from 'react-toastify';
+import ChallengesProvider from './hooks/ChallengesContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 const theme = baseTheme;

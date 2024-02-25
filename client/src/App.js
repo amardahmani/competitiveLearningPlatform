@@ -40,6 +40,8 @@ import RequireAuth from './components/auth/RequireAuth';
 import AuthForm from './components/auth/AuthForm';
 import { ToastContainer } from 'react-toastify';
 import QuestionManagement from './pages/Instructor/views/QuestionManagement';
+import ChallengesProvider, { ChallengesContext } from './hooks/ChallengesContext';
+import Dashboard1 from './pages/Admin/views/Dashboard';
 
 
 
@@ -75,7 +77,9 @@ function App () {
         <Route
         path="/admin"
         element={<RequireAuth allowedRole="ADMIN"/>}>
+          
           <Route path='/admin/' element={<AdminBoard />}>
+          <Route path='/admin/dashboard' element={<Dashboard1 />} />
           <Route path='/admin/plan' element={<Plannification />} />
           <Route path='/admin/path' element={<PathManagement />} />
           <Route path='/admin/path/:pathID' element={<ModuleManagementAdmin />} />
@@ -88,6 +92,7 @@ function App () {
         path="/instructor" 
         element={<RequireAuth allowedRole="INSTRUCTOR"/>}>
           <Route path="/instructor/" element={<InstructorBoard />}>
+          <Route path='/instructor/dashboard' element={<Dashboard1 />} />
           <Route path="/instructor/challenge" element={<ChallengeManagementInstructor />} />
           <Route path="/instructor/challenge/:challengeID" element={<ChallengeDetail />}/>
           <Route path="/instructor/path" element={<PathPage />} />
@@ -101,6 +106,7 @@ function App () {
         path="/recruiter" 
         element={<RequireAuth allowedRole="RECRUITER"/>}>
           <Route path="/recruiter/" element={<RecruiterBoard />}>
+          <Route path='/recruiter/dashboard' element={<Dashboard1 />} />
           <Route path="/recruiter/challenge" element={<ChallengeManagementRecruiter />} />
           <Route path="/recruiter/challenge/:challengeID" element={<ChallengeDetail />}/>
           <Route path="/recruiter/jobs" element={<JobManagement />} />

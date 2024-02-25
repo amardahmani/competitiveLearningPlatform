@@ -4,7 +4,6 @@ import { useDropzone } from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-import ChallengeCardUD from './ChallengeCardUD';
 import { updateChallenge } from '../../services/challenge.service';
 import { toast } from 'react-toastify';
 
@@ -29,8 +28,9 @@ const editorConfig = {
 
 const EditChallenge = (props) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-    const {open,handleClose,challenge} = props;
+    const {open,handleClose,challenge,updateChallenges} = props;
 
+    console.log("challenge in edit: " + challenge.title + " " + challenge.description + " " + challenge.duration);
     const [values, setValues] = useState({
       description: '',
       title:'',
@@ -65,12 +65,13 @@ const EditChallenge = (props) => {
       formData.append('poster', acceptedFiles[0]);
     }
 
-    updateChallenge(challenge.challengeID,formData).then(() => {
-      toast.success('Your changes have been saved successfully!', {
+    updateChallenge(challenge._id,formData).then((response) => {
+      toast.success(response.data.message, {
         position: toast.POSITION.TOP_RIGHT,
         className: 'toast--success',
         progressClassName: 'toast__progress--success',
       });
+      updateChallenges(response.data.challenge);
       handleClose();
     }).catch((err) => {
       console.log(err);
@@ -90,7 +91,7 @@ const EditChallenge = (props) => {
     }}>
         <DialogTitle sx={{marginTop:"5px"}}>
         <Typography variant='h3' textAlign='center' color="primary.main">
-        Edit Job
+        Edit Challenge
         </Typography>
         </DialogTitle>
         <Divider />
@@ -116,6 +117,7 @@ const EditChallenge = (props) => {
               name="duration"
               id="duration"
               label="duration"
+              type="number"
               variant="outlined"
               value={values.duration}
               onChange={(event) => handleInputChange('duration', event.target.value)}

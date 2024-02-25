@@ -20,7 +20,7 @@ const RecruiterBoard = () => {
   const Menuitems  = [
     {
       title:"dashboard",
-      href:"/recruiter/dahsboard",
+      href:"/recruiter/dashboard",
       icon:DashboardIcon
     },
     {

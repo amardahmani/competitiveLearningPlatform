@@ -15,7 +15,7 @@ import { getCurrentUser } from '../../../services/auth.service';
 const DeleteChallengeModal = (props) => {
 
     const navigate = useNavigate();
-    const {challengeID,open,handleClose} = props;
+    const {challengeID,open,handleClose,deleteChallengeClient} = props;
     const role = getCurrentUser().role;
     const handleDelete = () => {
       deleteChallenge(challengeID).then(() => {
@@ -24,6 +24,7 @@ const DeleteChallengeModal = (props) => {
           className: 'toast--success',
           progressClassName: 'toast__progress--success',
         });
+        deleteChallengeClient(challengeID);
         const redirectPath = role === 'INSTRUCTOR'
         ? '/instructor/challenge'
         : '/recruiter/challenges'; // Different redirect for different roles
@@ -52,10 +53,9 @@ const DeleteChallengeModal = (props) => {
 }
 
 
-const UpdateDeleteCard = ({challenge}) => {
+const UpdateDeleteCard = ({challenge,deleteChallengeClient,updateChallenges}) => {
     const [openEdit,setOpenEdit] = useState(false);
     const [openDelete,setOpenDelete] = useState(false);
-
     const handleOpenEdit = () => {
       setOpenEdit(true);
     }
@@ -78,9 +78,9 @@ const UpdateDeleteCard = ({challenge}) => {
         <Button color='danger' size="medium" onClick={handleOpenDelete}><DeleteIcon /></Button>
         <Button color='primary' size="medium"><VisibilityIcon /></Button>
         <EditChallenge open={openEdit} handleClose={handleCloseEdit}
-        challenge={challenge}/>
+        challenge={challenge} updateChallenges={updateChallenges}/>
         <DeleteChallengeModal open={openDelete} handleClose={handleCloseDelete} 
-        challengeID={challenge.challengeID}/>
+        challengeID={challenge._id} deleteChallengeClient={deleteChallengeClient}/>
     </Card>
   )
 }

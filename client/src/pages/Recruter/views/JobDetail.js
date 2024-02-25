@@ -25,6 +25,7 @@ const JobDetail = (props) => {
   const jobID = params.jobID;
   const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
   const {state} = useLocation();
+  console.log("state: "+state)
   const [job,setJob] = useState(state);
   const handleOpen = () => {
     setOpen(true);

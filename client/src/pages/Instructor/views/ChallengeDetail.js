@@ -12,15 +12,12 @@ import QuestionLibrary from '../../../components/questions/algorithmic/QuestionL
 import UpdateDeleteCard from '../../../components/Challenge/cards/UpdateDeleteCard'
 import { createAlgorithmic } from '../../../services/questions.service'
 import { getCurrentUser } from '../../../services/auth.service'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import DropAlgorithmic from '../../../components/questions/algorithmic/Buttons/DropAlgorithmic'
 import { toast } from 'react-toastify'
+import { ChallengesContext } from '../../../hooks/ChallengesContext'
 const ChallengeDetail = (props) => {
-
-  const user = getCurrentUser();
-  const id = user.id;
-  
-  const [open,setOpen] = useState(false);
+  const { updateChallenges,deleteChallengeClient } = useContext(ChallengesContext);
   const [openLibrary,setOpenLibrary] = useState(false);
   const [openAddInstructor,setOpenAddInstructor] = useState(false);
   const [instructors, setInstructors] = useState([]);
@@ -28,15 +25,11 @@ const ChallengeDetail = (props) => {
   const params = useParams();
   const challengeID = params.challengeID;
   const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
-  const {state} = useLocation();
-  const [challenge,setChallenge] = useState(state);
-  const handleOpen = () => {
-    setOpen(true);
-  }
   
-  const handleClose = () => {
-    setOpen(false);
-  }
+  const {state} = useLocation();
+  const challenge = state.challenge;
+
+
 
   const handleOpenLibrary = () => {
     setOpenLibrary(true);
@@ -57,7 +50,6 @@ const ChallengeDetail = (props) => {
   const handleSave = (instructor) => {
     const instructorId = instructor._id;
     pushInstructor(challengeID,instructorId).then((response) => {
-      console.log(response);
       setInstructors((prevInstructors) =>
       prevInstructors.filter((prevInstructor) => prevInstructor._id !== instructor._id)
     );
@@ -74,7 +66,6 @@ const ChallengeDetail = (props) => {
   
     removeInstructor(challengeID, instructorId)
       .then((response) => {
-        console.log(response);
   
         // Remove the instructor from the savedInstructors array
         setSavedInstructors((prevInstructors) =>
@@ -122,7 +113,6 @@ const ChallengeDetail = (props) => {
     };
     fetchData()
   },[])
-  console.log(algorithmicQuestions)
   const addAlgorithmicQuestion = (algorithmicQuestions,problem) => {
     setAlgorithmicQuestions([...algorithmicQuestions, problem]);
   }
@@ -188,11 +178,14 @@ const ChallengeDetail = (props) => {
   </Card>
     </Box>
   <Box mt={4} ml={3}>
-      <UpdateDeleteCard
-      challenge={challenge}/>
       
+  <UpdateDeleteCard 
+      challenge={challenge}
+      updateChallenges={updateChallenges}
+      deleteChallengeClient={deleteChallengeClient}
+    /> 
   </Box>
-  
+    
   </Box>
   )
 }

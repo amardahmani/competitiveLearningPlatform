@@ -1,12 +1,13 @@
-import { Box, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, IconButton, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, CardContent, CardMedia, Typography } from '@mui/material'
 import React, { useState } from 'react'
-import DeleteIcon from '@mui/icons-material/Delete';
-import image from '../../assets/image.png'
-import EditIcon from '@mui/icons-material/Edit';
 import { useNavigate } from 'react-router-dom';
 const ChallengeCardUD = (props) => {
-    const {title,duration,challengeID,description,image} = props;
+    const {title,challengeID,image,challenge,updateChallenge} = props;
     const [hover, setHover] = useState(false);
+
+    console.log("challenge in card: "+challenge.title + ", challenge ID: "+challenge._id + ", description: "+
+    challenge.description,"duration: "+challenge.duration);
+   
     const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
     const navigate = useNavigate();
     const handleMouseEnter = () => {
@@ -18,8 +19,12 @@ const ChallengeCardUD = (props) => {
 
     
     const handleClick = () => {
-      navigate(challengeID,{state:{title:title,duration:duration,challengeID:challengeID,description:description}});
-    }
+      navigate(challengeID, {
+        state: {
+          challenge: challenge
+        }
+      });
+    };
 
   return (
         <Card>

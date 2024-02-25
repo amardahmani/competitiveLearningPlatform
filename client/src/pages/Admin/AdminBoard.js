@@ -17,7 +17,7 @@ const AdminBoard = () => {
     const Menuitems = [
       {
         title: "Dashboard",
-        href: "/admin/challenge",
+        href: "/admin/dashboard",
         icon: DashboardIcon,
       },
       {
