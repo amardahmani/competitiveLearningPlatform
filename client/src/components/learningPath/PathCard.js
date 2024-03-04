@@ -6,8 +6,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useNavigate } from 'react-router-dom';
 const PathCard = (props) => {
-    const {title,description,pathID,image,MoreUD,setPaths} = props;
-    const {actions: ActionsComponent} = props;
+    const {title,description,pathID,image,MoreUD,setPaths,PathCardDeveloper,LearnMore} = props;
     const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
     const [showMore, setShowMore] = useState(false);
     const navigate = useNavigate();
@@ -35,11 +34,12 @@ const PathCard = (props) => {
             /* Display the MoreUD component if it's passed as a prop */
                             <MoreUD title={title} description={description} pathID={pathID} setPaths={setPaths} />
                         )}
+                    
                 </Box>
-                
+                {LearnMore && (<LearnMore pathID={pathID} setPaths={setPaths}/>)}
+                {PathCardDeveloper && <PathCardDeveloper pathID={pathID}/>}
             </CardContent>
-            {ActionsComponent && <ActionsComponent 
-                pathID={pathID}/>}
+            
             
         </Card>
     

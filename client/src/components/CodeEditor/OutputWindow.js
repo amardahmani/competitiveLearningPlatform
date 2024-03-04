@@ -1,6 +1,7 @@
+import { Box, Dialog, DialogContent, DialogTitle, Divider, Typography } from "@mui/material";
 import React from "react";
 
-const OutputWindow = ({ outputDetails }) => {
+const OutputWindow = ({ outputDetails,open,handleClose }) => {
   const getOutput = () => {
     let statusId = outputDetails?.status?.id;
 
@@ -35,12 +36,27 @@ const OutputWindow = ({ outputDetails }) => {
   };
   return (
     <>
-      <h1 className="font-bold text-xl bg-clip-text text-transparent bg-gradient-to-r from-slate-900 to-slate-700 mb-2">
-        Output
-      </h1>
-      <div className="w-full h-56 bg-[#1e293b] rounded-md text-white font-normal text-sm overflow-y-auto">
-        {outputDetails ? <>{getOutput()}</> : null}
-      </div>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>
+          <Typography variant="h3" align="center">OUTPUT</Typography>
+        </DialogTitle>
+        <Divider />
+        <DialogContent>
+        <Box sx={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <Typography variant="body2" sx={{ fontWeight: '600', padding: '0.5rem 0.75rem', borderRadius: '0.25rem', bgcolor: '#f3f4f6' }}>
+            Status: {outputDetails?.status?.description}
+          </Typography>
+          <Typography variant="body2" sx={{ fontWeight: '600', padding: '0.5rem 0.75rem', borderRadius: '0.25rem', bgcolor: '#f3f4f6' }}>
+            Memory: {outputDetails?.memory}
+          </Typography>
+          <Typography variant="body2" sx={{ fontWeight: '600', padding: '0.5rem 0.75rem', borderRadius: '0.25rem', bgcolor: '#f3f4f6' }}>
+            Time: {outputDetails?.time}
+          </Typography>
+        </Box>
+        
+        </DialogContent>
+      </Dialog>
+      
     </>
   );
 };

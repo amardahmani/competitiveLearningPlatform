@@ -7,34 +7,18 @@ import TagIcon from '@mui/icons-material/Tag';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import QuestionPrompt from '../../../components/CodeEditor/QuestionPrompt';
-import { getAlgorithmic } from '../../../services/questions.service';
+import QuestionPrompt from '../../../../components/CodeEditor/QuestionPrompt';
+import { getAlgorithmic } from '../../../../services/questions.service';
 import { useParams } from 'react-router-dom';
-const Problem = () => {
+const Problem = ({problem}) => {
 
-    const params = useParams();
-    const [problem,setProblem] = useState('');
-    const [value, setValue] = React.useState('1');
-    const id = params.questionID;
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await getAlgorithmic(id);
-                setProblem(response.data);
-                console.log(response.data)
-            }catch(err){
-                console.log(err);
-            }
-        };
-        fetchData();
-    },[])
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   return (
     <Box mt={3}>
-        <Box display='flex' flexDirection='column' ml={3} p={1}>
+        <Box display='flex' flexDirection='column' pl={4}>
             {problem ? 
             <Typography variant='h4'>{problem.algorithmic.title}</Typography>:
             <p>loading</p>

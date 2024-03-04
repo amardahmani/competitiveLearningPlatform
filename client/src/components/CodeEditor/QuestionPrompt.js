@@ -28,15 +28,15 @@ const QuestionPrompt = (props) => {
   const ctrlPress = useKeyPress("Control");
   const params = useParams();
   const [isSolved,setIsSolved] = useState("");
-  console.log(params);
   const {problem} = props;
-  
-  
-  
-  console.log(problem)
+  const [open,setOpen] = useState(false);
 
-  const [content,setContent] = useState([]);
-
+  const handleOpen = () =>{
+    setOpen(true);
+  }
+  const handleClose = () =>{
+    setOpen(false);
+  }
     
 
   const onSelectChange = (sl) => {
@@ -68,8 +68,8 @@ const QuestionPrompt = (props) => {
       language_id: language.id,
       // encode source code in base64
       source_code: btoa(code),
-      stdin:btoa("ooxx\r\nxooxx"),
-      expected_output: btoa("true\nfalse\n"),
+      stdin:btoa(problem.inputFileContent),
+      expected_output: btoa(problem.expectedOutputFileContent),
     };
     const options = {
       method: "POST",
@@ -90,6 +90,7 @@ const QuestionPrompt = (props) => {
         console.log("res.data", response.data);
         const token = response.data.token;
         checkStatus(token);
+        handleOpen()
       })
       .catch((err) => {
         let error = err.response ? err.response.data : err;
@@ -204,8 +205,6 @@ const QuestionPrompt = (props) => {
     <>
     
     <Box display="flex" backgroundColor='background.default'>
-      
-        
 
         <Box width='45%'
         
@@ -225,7 +224,6 @@ const QuestionPrompt = (props) => {
     <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
   </Box>
   <Box sx={{ flex: 1 }}>
-  {outputDetails && <OutputDetails outputDetails={outputDetails} />}
 
     <CodeEditorWindow
       code={code}
@@ -240,11 +238,11 @@ const QuestionPrompt = (props) => {
       variant="contained"
       disabled={!code}
       sx={{ float: "right" }}
-      fullWidth
+      width="30%"
     >
-      Submit
+      COMPILE & RUN
     </Button>
-    {outputDetails && <OutputDetails outputDetails={outputDetails} />}
+    {outputDetails && <OutputWindow outputDetails={outputDetails} open={open} handleClose={handleClose}/>}
   </Box>
   
 </Box>

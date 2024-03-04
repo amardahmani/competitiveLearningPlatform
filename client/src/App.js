@@ -4,27 +4,18 @@ import Navbar from './components/navigation/Navbar';
 import { Box, Container, createTheme,CssBaseline,Switch,ThemeProvider, useMediaQuery } from '@mui/material';
 
 import { Route, Router, Routes } from 'react-router-dom';
-import { useState } from 'react';
 import InstructorBoard from './pages/Instructor/InstructorBoard';
 import ChallengeManagement from './pages/Instructor/views/ChallengeManagement';
 import AdminBoard from './pages/Admin/AdminBoard';
 import Plannification from './pages/Admin/views/Plannification';
 import DeveloperBoard from './pages/Developer/DeveloperBoard';
 import Home from './pages/Developer/views/Home';
-import CreateChallenge from './components/Challenge/CreateChallenge';
 import Compete from './pages/Developer/views/Compete';
 import ChallengeDetail from './pages/Instructor/views/ChallengeDetail';
-import Sidebar from './components/navigation/SideBar';
 import Auth from './components/auth/Auth';
-import ChallengePreview from './components/preview/ChallengePreview';
-import ListProblems from './components/questions/algorithmic/ListProblems';
-import QuestionPrompt from './components/CodeEditor/QuestionPrompt';
 import ProblemSet from './pages/Developer/views/ProblemSet';
 import Problem from './pages/Developer/views/Problem';
 import Users from './components/users/Users';
-import ModuleCard from './components/module/ModuleCard';
-import PathCard from './components/learningPath/PathCard';
-import PathTabs from './components/learningPath/PathTabs';
 import PathManagement from './pages/Admin/views/PathManagement';
 import ModuleManagementAdmin from './pages/Admin/views/ModuleManagement';
 import PathPage from './pages/Instructor/views/PathPage';
@@ -42,6 +33,8 @@ import { ToastContainer } from 'react-toastify';
 import QuestionManagement from './pages/Instructor/views/QuestionManagement';
 import ChallengesProvider, { ChallengesContext } from './hooks/ChallengesContext';
 import Dashboard1 from './pages/Admin/views/Dashboard';
+import PathDetail from './pages/Developer/views/PathDetail';
+import ModuleDetail from './pages/Developer/views/ModuleDetail';
 
 
 
@@ -70,6 +63,9 @@ function App () {
           <Route path="/developer/compete" element={<Compete />} />
           <Route path="/developer/compete/:challengeID" element={<Competition />} />
           <Route path="/developer/compete/:challengeID/problemset" element={<ProblemSet />} />
+          <Route path="/developer/dashboard/:pathID" element={<PathDetail />} />
+          <Route path="/developer/dashboard/:pathID/:moduleID" element={<ModuleDetail />} />
+          <Route path="/developer/dashboard/:pathID/:moduleID/:questionID" element={<Problem />} />
           </Route>
           
           {/* Other child routes of DeveloperBoard */}

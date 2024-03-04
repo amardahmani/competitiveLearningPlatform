@@ -1,34 +1,15 @@
-import { Box, Dialog, DialogContent, DialogTitle, Modal, TextField,Button, InputLabel, Typography, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, Card } from '@mui/material';
+import { Box,Button, Typography, Table, TableContainer, TableRow, TableCell, TableHead, TableBody, Card } from '@mui/material';
 import React, { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { getChallengeQuestions } from '../../../services/challenge.service';
 
-const ListProblems = () => {
+const ListProblems = ({problems}) => {
 
-    const [problems,setProblems] = useState([]);
     const navigate = useNavigate();
-    const params = useParams();
-    const challengeID = params.challengeID;
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await getChallengeQuestions(challengeID);
-                setProblems(response.data);
-                console.log(response);
-            }catch(err){
-                console.log(err)
-            }
-        };
-        fetchData()
-    },[])
-
     const handleClick = (id) => {
         navigate(`${id}`);
     }
   return (
-    <Box>
-        <Card variant='outlined' sx={{width:"70%", margin:"30px auto"}}>
+        <Card variant='outlined' sx={{width:"100%", margin:"0px auto"}}>
         <TableContainer>
         <Table 
         stripped
@@ -46,7 +27,7 @@ const ListProblems = () => {
           </TableRow>
           </TableHead>
           <TableBody>
-            {problems.algorithmicQuestions && problems.algorithmicQuestions.map((question) => {
+            {problems && problems.map((question) => {
               return (
                 <TableRow key={question._id}>
                   <TableCell>
@@ -77,7 +58,6 @@ const ListProblems = () => {
         </Table>
       </TableContainer>
         </Card>
-    </Box>
   )
 }
 

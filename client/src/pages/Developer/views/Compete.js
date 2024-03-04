@@ -1,25 +1,13 @@
 import { Box, Grid } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import ChallengeCard from '../../../components/Challenge/ChallengeCard'
-import { getPlannedChallenges } from '../../../services/challenge.service';
+import { CompetitionContext } from '../../../hooks/CompetitionContext';
 
 const Compete = () => {
 
-    const [challenges,setChallenges] = useState([]);
+    const {challenges} = useContext(CompetitionContext);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await getPlannedChallenges();
-                console.log(response.data);
-                setChallenges(response.data);
-            }catch(err){
-                console.log(err);
-            }
-        };
-        fetchData()
-    },[])
-
+    
 
   return (
     <Box sx={{display:"flex"}} ml={6}>
@@ -32,7 +20,7 @@ const Compete = () => {
                     title={challenge.title}
                     type={challenge.type}
                     startDate={challenge.startDate}
-                    
+                    poster={challenge.poster}                    
                     endDate={challenge.endDate}
                     data={challenge}
                     />
@@ -41,7 +29,7 @@ const Compete = () => {
             
         </Grid>
         <Box>
-
+            
         </Box>
     </Box>
   )

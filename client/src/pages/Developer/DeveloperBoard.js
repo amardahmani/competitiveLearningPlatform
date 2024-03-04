@@ -1,23 +1,31 @@
-import { Box, Container, Grid, OutlinedInput, Table } from '@mui/material'
+import { Box, CssBaseline } from '@mui/material'
 import React from 'react'
 import Navbar from '../../components/navigation/Navbar'
-import PathCard from '../../components/learningPath/PathCard';
-import Header from '../../components/header/header';
 import { Outlet } from 'react-router-dom';
+import CompetitionProvider from '../../hooks/CompetitionContext';
 
 const DeveloperBoard = () => {
   
 
-  const learningPaths = [
-
-  ];
   
   return (
     <Box sx={{backgroundColor: (theme) =>
       `${theme.palette.primary.light}!important`,
   }}>
+    <CssBaseline />
+    <Box
+        sx={{
+          minHeight: '100vh', // Adjusted to use viewport height
+          minWidth: '100%',
+          overflow: 'hidden',
+        }}
+      >
+        
         <Navbar />
+        <CompetitionProvider>
         <Outlet />
+        </CompetitionProvider>
+      </Box>
     </Box>
   )
 }

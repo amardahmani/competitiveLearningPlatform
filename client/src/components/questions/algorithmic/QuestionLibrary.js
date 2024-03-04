@@ -31,8 +31,7 @@ const QuestionLibrary = (props) => {
       
       formData.append('questionID',selectedProblem);
       const problem = problems.find((problem) => problem._id === selectedProblem);
-      
-      console.log(formData)
+        
       pushAlgorithmicQuestion(eventID,formData).then((response) => {
         addAlgorithmicQuestion(algorithmicQuestions,problem);
         handleCloseLibrary();

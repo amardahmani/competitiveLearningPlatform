@@ -24,12 +24,6 @@ export const languageOptions = [
       value: "basic",
     },
     {
-      id: 75,
-      name: "C (Clang 7.0.1)",
-      label: "C (Clang 7.0.1)",
-      value: "c",
-    },
-    {
       id: 76,
       name: "C++ (Clang 7.0.1)",
       label: "C++ (Clang 7.0.1)",
@@ -47,24 +41,14 @@ export const languageOptions = [
       label: "C++ (GCC 7.4.0)",
       value: "cpp",
     },
-    {
-      id: 49,
-      name: "C (GCC 8.3.0)",
-      label: "C (GCC 8.3.0)",
-      value: "c",
-    },
+    
     {
       id: 53,
       name: "C++ (GCC 8.3.0)",
       label: "C++ (GCC 8.3.0)",
       value: "cpp",
     },
-    {
-      id: 50,
-      name: "C (GCC 9.2.0)",
-      label: "C (GCC 9.2.0)",
-      value: "c",
-    },
+    
     {
       id: 54,
       name: "C++ (GCC 9.2.0)",
@@ -112,12 +96,6 @@ export const languageOptions = [
       name: "Erlang (OTP 22.2)",
       label: "Erlang (OTP 22.2)",
       value: "erlang",
-    },
-    {
-      id: 44,
-      label: "Executable",
-      name: "Executable",
-      value: "exe",
     },
     {
       id: 87,
@@ -205,24 +183,14 @@ export const languageOptions = [
       label: "PHP (7.4.1)",
       value: "php",
     },
-    {
-      id: 43,
-      label: "Plain Text",
-      name: "Plain Text",
-      value: "text",
-    },
+    
     {
       id: 69,
       name: "Prolog (GNU Prolog 1.4.5)",
       label: "Prolog (GNU Prolog 1.4.5)",
       value: "prolog",
     },
-    {
-      id: 70,
-      name: "Python (2.7.17)",
-      label: "Python (2.7.17)",
-      value: "python",
-    },
+    
     {
       id: 71,
       name: "Python (3.8.1)",
@@ -253,12 +221,7 @@ export const languageOptions = [
       label: "Scala (2.13.2)",
       value: "scala",
     },
-    {
-      id: 82,
-      name: "SQL (SQLite 3.27.2)",
-      label: "SQL (SQLite 3.27.2)",
-      value: "sql",
-    },
+    
     {
       id: 83,
       name: "Swift (5.2.3)",

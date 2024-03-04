@@ -17,9 +17,7 @@ import { getCurrentUser } from '../../services/auth.service';
 const ChallengePreview = (props) => {
   const {challenge,handleJoin,joined,handleSolve,challengeID} = props;
   const [value, setValue] = React.useState('1');
-  
-  const user = getCurrentUser();
-
+  const fileUrl = `http://localhost:3001/uploads/poster/${challenge.poster}`;
   const navigate = useNavigate();
 
   const handleChange = (event, newValue) => {
@@ -28,7 +26,7 @@ const ChallengePreview = (props) => {
   
   return (
     <Box width='100%'>
-        <Box component="img" sx={{width:"100%",height:350}} src={challengeCard}>
+        <Box component="img" sx={{width:"100%",height:350}} src={fileUrl}>
 
         </Box>
         <Box>

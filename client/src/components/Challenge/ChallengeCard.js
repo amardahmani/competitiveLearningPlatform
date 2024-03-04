@@ -6,10 +6,10 @@ import { joinAlgorithmic } from '../../services/challenge.service';
 import { useNavigate } from 'react-router-dom';
 const ChallengeCard = (props) => {
   const user = getCurrentUser();
-  const {title,startDate,endDate,description,challenge,type,data} = props;
+  const {title,startDate,endDate,description,challenge,type,data,poster} = props;
   const [participatant,setIsParticipant] = useState(false);
   const navigate = useNavigate();
-  
+  const fileUrl = `http://localhost:3001/uploads/poster/${poster}`;
   
   /*const handleSubmit = () => {
     const formData = new FormData();
@@ -39,7 +39,6 @@ const ChallengeCard = (props) => {
     minute: '2-digit',
     hour12: true,
   });
-  console.log(data);
   const handleSubmit = (challenge) => {
     const id = challenge.challenge;
     console.log(challenge)
@@ -59,7 +58,7 @@ const ChallengeCard = (props) => {
         
         <CardMedia 
         component="img"
-        src={image}
+        src={fileUrl}
         width="100%"
         height="100%"
         

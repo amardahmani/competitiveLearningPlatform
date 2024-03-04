@@ -2,8 +2,8 @@ import { Box, Card, CardContent, CardMedia, Typography } from '@mui/material'
 import React from 'react'
 import imag from '../../assets/8.jpg'
 
-const ChallengeHeader = (props) => {
-    const {title,startDate,endDate} = props;
+const ChallengeHeader = ({challenge}) => {
+    const {title,startDate,endDate} = challenge;
 
   return (
     <Box width='100%'>

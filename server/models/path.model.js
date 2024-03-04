@@ -13,7 +13,8 @@ const PathSchema = mongoose.Schema({
     creator: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
       problemSetters: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
       modules:[{type: mongoose.Schema.Types.ObjectId, ref: 'Module'}],
-      participants:[{type:mongoose.Schema.Types.ObjectId, ref:'User'}]
+      participants:[{type:mongoose.Schema.Types.ObjectId, ref:'User'}],
+      submissions:[{type:mongoose.Schema.Types.ObjectId,ref:'Submission'}]
 })
 
 const Path = mongoose.model('Path',PathSchema);

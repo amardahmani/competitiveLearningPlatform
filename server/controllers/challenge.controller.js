@@ -181,6 +181,10 @@ export const getChallengeQuestions = async (req,res) => {
           _id: { $in: challenge.algorithmicQuestions },
         });
         
+        if(!algorithmicQuestions) 
+        {
+          return res.status(404).send({message:"No algorithmic questions found"});
+        }
     
         res.status(200).send({ algorithmicQuestions });
       } catch (error) {

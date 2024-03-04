@@ -1,20 +1,28 @@
 import { Box,Tab } from '@mui/material'
-import React from 'react'
-import ChallengeHeader from '../../../components/Challenge/ChallengeHeader'
+import React, { useContext } from 'react'
+import ChallengeHeader from '../../../../components/Challenge/ChallengeHeader'
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
-import ListProblems from '../../../components/questions/algorithmic/ListProblems';
-const ProblemSet = () => {
+import ListProblems from '../../../../components/questions/algorithmic/ListProblems';
+import { useParams } from 'react-router-dom';
+const ProblemSet = ({challenge,problems}) => {
 
     const [value, setValue] = React.useState('1');
+    
 
-  const handleChange = (event, newValue) => {
+
+    const handleChange = (event, newValue) => {
     setValue(newValue);
-  };
+    };
+
+  
+
   return (
     <Box height='600px'>
-        <ChallengeHeader />
+      {challenge && (
+        <ChallengeHeader challenge={challenge}/>
+      )}
         
         <Box sx={{ width: '100%', typography: 'body1' }}>
       <TabContext value={value}>
@@ -26,7 +34,7 @@ const ProblemSet = () => {
           </TabList>
         </Box>
         <TabPanel value="1">
-            <ListProblems/>
+            <ListProblems problems={problems}/>
         </TabPanel>
         <TabPanel value="2">Submissions</TabPanel>
         <TabPanel value="3">leaderBoard</TabPanel>

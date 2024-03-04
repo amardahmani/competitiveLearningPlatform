@@ -24,7 +24,7 @@ const PathPage = () => {
         <Grid container spacing={1}>
             {paths && paths.map((path) => (
               <Grid item md={4} xs={12}>
-                <PathCard buttons={MoreUD}
+                <PathCard MoreUD={MoreUD}
                 actions={LearnMore}
                 key={path._id}
                 image={path.image}

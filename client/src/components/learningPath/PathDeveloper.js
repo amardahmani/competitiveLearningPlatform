@@ -1,11 +1,15 @@
 import { Box, Button, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
-const PathDeveloper = () => {
+const PathCardDeveloper = ({pathID}) => {
 
-    const handleClick = () => {
+  const navigate = useNavigate();
 
-    } 
+  const handleClick = () => {
+    navigate(pathID)
+    console.log(pathID);
+  } 
 
   return (
     <Box sx={{display:"flex",background:"hsla(0,0%,95%,.4)",justifyContent:"space-between",alignItems:"flex-start"}} width="100%">
@@ -39,4 +43,4 @@ const PathDeveloper = () => {
   )
 }
 
-export default PathDeveloper
+export default PathCardDeveloper

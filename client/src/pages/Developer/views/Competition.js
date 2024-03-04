@@ -1,53 +1,60 @@
-import { Box, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react';
+import { Box, Button, Typography } from '@mui/material';
+import React, { useContext, useEffect, useState } from 'react';
 import ChallengePreview from '../../../components/preview/ChallengePreview';
 import { useNavigate, useParams } from 'react-router-dom';
-import { getChallenge, joinAlgorithmic } from '../../../services/challenge.service';
+import {  joinAlgorithmic } from '../../../services/challenge.service';
 import { getCurrentUser } from '../../../services/auth.service';
+import { toast } from 'react-toastify';
+import CompetitionProvider, { CompetitionContext } from '../../../hooks/CompetitionContext';
 
 const Competition = () => {
-  const [challenge, setChallenge] = useState(undefined);
+  const {getChallenge,challenges} = useContext(CompetitionContext);
   const [joined, setJoined] = useState(false);
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
   const [loading, setLoading] = useState(true); // Loading state
   const user = getCurrentUser();
-  const id = user.id;
   const navigate = useNavigate();
 
-  const params = useParams();
-  const challengeID = params.challengeID;
+  const {challengeID} = useParams();
 
+  const challenge = getChallenge(challengeID);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await getChallenge(challengeID);
-        console.log(response.data);
-        setChallenge(response.data);
-        setJoined(response.data.participants.includes(user.id));
-        setLoading(false); // Set loading state to false when data is fetched
-      } catch (err) {
-        console.log(err);
-        setLoading(false); // Set loading state to false in case of error
-      }
-    };
-
-    fetchData();
-
-  }, [challengeID, user.id]);
-
+    if (challenge) {
+      setJoined(challenge.participants.includes(user.id));
+    }
+  }, [challenge, user.id]);
+  
   const handleSolve = (challengeID) => {
-    navigate(`questions`);
+    navigate(`problemset`);
   };
 
-  const handleJoin = () => {
-    joinAlgorithmic(challengeID, user.id);
+  const handleJoin = async () => {
+    
+    const formData = new FormData();
+    formData.append("challengeID", challengeID);
+    formData.append("id", user.id);
+
+    await joinAlgorithmic(formData).then((response) => {
+        toast(response.data.message, {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+      navigate(`problemset`);
+      
+    });
     setJoined(true);
   };
 
+  const handleClick = () => {
+    const challenge = getChallenge(challengeID);
+    console.log(challenge);
+  }
+
   return (
     <>
-      {loading ? (
+      {!challenge ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
           <Typography variant="h4">Loading...</Typography>
         </Box>
@@ -56,12 +63,14 @@ const Competition = () => {
           challenge={challenge}
           joinAlgorithmic={joinAlgorithmic}
           joined={joined}
+          handleJoin={handleJoin}
           handleSolve={handleSolve}
           challengeID={challengeID}
           startDate={startDate}
           endDate={endDate}
         />
       )}
+   
     </>
   );
 };
