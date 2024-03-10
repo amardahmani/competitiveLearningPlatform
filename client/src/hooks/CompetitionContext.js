@@ -26,8 +26,9 @@ const CompetitionProvider = ({ children }) => {
 
   const getProblems = (challengeID) => {
     const challenge = challenges.find(challenge => challenge._id === challengeID);
+    console.log("challenge in context:"+challenge);
     if (challenge) {
-        return challenge.algorithmicQuestions;
+        return challenge.algorithmicQuestions ;
     } else {
         return [];
     }

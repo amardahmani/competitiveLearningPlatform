@@ -10,7 +10,7 @@ const ProblemSet = ({challenge,problems}) => {
 
     const [value, setValue] = React.useState('1');
     
-
+    console.log("problems in problemSet: "+problems)
 
     const handleChange = (event, newValue) => {
     setValue(newValue);

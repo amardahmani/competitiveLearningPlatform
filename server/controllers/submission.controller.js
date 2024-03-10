@@ -5,7 +5,7 @@ import Job from "../models/job.model.js";
 
 export const createSubmission = async (req, res) => {
   try {
-    const { question, status, code, type, challenge, points, language } = req.body;
+    const { questionID,code,language,eventID,event,points,status,problemType} = req.body;
 
     const program = Program({
       language,
@@ -14,32 +14,33 @@ export const createSubmission = async (req, res) => {
     await program.save();
 
     const submission = Submission({
-      question,
+      questionID,
+      problemType,
       status,
+      event,
+      eventID,
       program: program._id,
-      problemType: type,
-      challenge,
       creationDate: Date.now(),
       author: req.user.id,
     });
 
-    console.log(req.user.id);
     if (status === 'Accepted') {
       const developer = await User.findOne({ _id: req.user.id });
       console.log(developer);
 
-      // Check if the developer has already received an "Accepted" status
       const previousAcceptedSubmission = await Submission.findOne({
         author: req.user.id,
         status: 'Accepted',
+        event:event,
+        eventID:eventID
       });
-
+      console.log(previousAcceptedSubmission);
       if (previousAcceptedSubmission) {
         return res.status(400).send({ message: 'You have already received an "Accepted" status' });
       }
 
-      // Increment the developer's score only if no previous "Accepted" submission found
       developer.incrementScore(points);
+      await submission.save();
       return res.status(200).send({ message: 'You have earned ' + points + ' xp' });
     }
 

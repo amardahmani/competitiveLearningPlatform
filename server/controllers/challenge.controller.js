@@ -147,7 +147,8 @@ export const getChallengesPlanned = async (req,res) => {
   try {
     const plannifications = await Plannification.find({ type: 'Challenge' }).populate('event', 'title').lean();
     const challengeIds = plannifications.map(plannification => plannification.event._id);
-    const challenges = await Challenge.find({ _id: { $in: challengeIds } }).lean();
+    const challenges = await Challenge.find({ _id: { $in: challengeIds } }).
+    populate('algorithmicQuestions').lean();
 
     const challengeData = plannifications.map(plannification => {
       const challenge = challenges.find(challenge => challenge._id.equals(plannification.event._id));

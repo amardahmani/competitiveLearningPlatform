@@ -1,7 +1,6 @@
 import './App.css';
-import Navbar from './components/navigation/Navbar';
 
-import { Box, Container, createTheme,CssBaseline,Switch,ThemeProvider, useMediaQuery } from '@mui/material';
+import {CssBaseline, useMediaQuery } from '@mui/material';
 
 import { Route, Router, Routes } from 'react-router-dom';
 import InstructorBoard from './pages/Instructor/InstructorBoard';
@@ -13,8 +12,6 @@ import Home from './pages/Developer/views/Home';
 import Compete from './pages/Developer/views/Compete';
 import ChallengeDetail from './pages/Instructor/views/ChallengeDetail';
 import Auth from './components/auth/Auth';
-import ProblemSet from './pages/Developer/views/ProblemSet';
-import Problem from './pages/Developer/views/Problem';
 import Users from './components/users/Users';
 import PathManagement from './pages/Admin/views/PathManagement';
 import ModuleManagementAdmin from './pages/Admin/views/ModuleManagement';
@@ -29,12 +26,13 @@ import Competition from './pages/Developer/views/Competition';
 import ChallengeManagementInstructor from './pages/Instructor/views/ChallengeManagement';
 import RequireAuth from './components/auth/RequireAuth';
 import AuthForm from './components/auth/AuthForm';
-import { ToastContainer } from 'react-toastify';
 import QuestionManagement from './pages/Instructor/views/QuestionManagement';
-import ChallengesProvider, { ChallengesContext } from './hooks/ChallengesContext';
 import Dashboard1 from './pages/Admin/views/Dashboard';
 import PathDetail from './pages/Developer/views/PathDetail';
 import ModuleDetail from './pages/Developer/views/ModuleDetail';
+import ProblemSetChallenge from './pages/Developer/views/Events/challenge/ProblemSetChallenge';
+import ProblemPromptChallenge from './pages/Developer/views/Events/challenge/ProblemPromptChallenge';
+import ProblemPromptPath from './pages/Developer/views/Events/path/ProblemPromptPath';
 
 
 
@@ -62,10 +60,11 @@ function App () {
           <Route path="/developer/dashboard" element={<Home />} />
           <Route path="/developer/compete" element={<Compete />} />
           <Route path="/developer/compete/:challengeID" element={<Competition />} />
-          <Route path="/developer/compete/:challengeID/problemset" element={<ProblemSet />} />
+          <Route path="/developer/compete/:challengeID/problemset" element={<ProblemSetChallenge />} />
+          <Route path="/developer/compete/:challengeID/problemset/:questionID" element={<ProblemPromptChallenge />} />
           <Route path="/developer/dashboard/:pathID" element={<PathDetail />} />
           <Route path="/developer/dashboard/:pathID/:moduleID" element={<ModuleDetail />} />
-          <Route path="/developer/dashboard/:pathID/:moduleID/:questionID" element={<Problem />} />
+          <Route path="/developer/dashboard/:pathID/:moduleID/:questionID" element={<ProblemPromptPath/>}/>
           </Route>
           
           {/* Other child routes of DeveloperBoard */}

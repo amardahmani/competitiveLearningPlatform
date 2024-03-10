@@ -12,7 +12,7 @@ const ModuleDetail = () => {
     const [tutorials,setTutorials] = useState([]);
     const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
 
-    const moduleID = useParams().moduleID;
+    const {moduleID} = useParams();
 
     useEffect(() => {
       const fetchData = async () => {
@@ -21,7 +21,6 @@ const ModuleDetail = () => {
           setTutorials(tutorialsResponse.data.tutorials);
     
           const algorithmicQuestionsResponse = await getAlgorithmicModule(moduleID);
-          console.log("algorithmicQuestionsResponse: "+algorithmicQuestionsResponse);
           setAlgorithmicQuestions(algorithmicQuestionsResponse.data.problems);
         } catch (err) {
           console.error(err);

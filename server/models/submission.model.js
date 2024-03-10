@@ -13,9 +13,9 @@ const SubmissionSchema = new mongoose.Schema({
   status:{
     type:String
   },
-  question: {
+  questionID: {
     type: mongoose.Schema.Types.ObjectId,
-    refPath: 'problemType'
+    refPath: 'Algorithmic'
   },
   score:{
     type: Number
@@ -32,10 +32,14 @@ const SubmissionSchema = new mongoose.Schema({
   creationDate: {
     type:Date
   },
-  type: {
+  event: {
     type: String,
     enum: ['Job','Challenge','Path'],
     required: true
+  },
+  eventID: {
+    type: mongoose.Schema.Types.ObjectId,
+    refPath: 'event'
   }  
 });
 

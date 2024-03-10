@@ -1,5 +1,5 @@
 import { Box, Typography,Tab } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import HowToRegIcon from '@mui/icons-material/HowToReg';
 import TaskIcon from '@mui/icons-material/Task';
 import ModeStandbyIcon from '@mui/icons-material/ModeStandby';
@@ -8,14 +8,14 @@ import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
 import QuestionPrompt from '../../../../components/CodeEditor/QuestionPrompt';
-import { getAlgorithmic } from '../../../../services/questions.service';
-import { useParams } from 'react-router-dom';
-const Problem = ({problem}) => {
+const Problem = ({problem,event,eventID}) => {
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+    const [value,setValue] = useState('1');
+    const handleChange = (event, newValue) => {
+        setValue(newValue);
+    };
 
+    console.log("problem"+ problem.algorithmic._id)
   return (
     <Box mt={3}>
         <Box display='flex' flexDirection='column' pl={4}>
@@ -52,7 +52,7 @@ const Problem = ({problem}) => {
             </TabList>
         </Box>
         <TabPanel value="1" sx={{padding:"0px"}}>
-            <QuestionPrompt problem={problem}/>
+            <QuestionPrompt problem={problem} event={event} eventID={eventID}/>
         </TabPanel>
         <TabPanel value="2">Item Two</TabPanel>
         <TabPanel value="3">Item Three</TabPanel>

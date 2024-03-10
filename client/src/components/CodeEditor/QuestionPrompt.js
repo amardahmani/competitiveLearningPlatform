@@ -4,17 +4,14 @@ import axios from "axios";
 import { classnames } from "../../utils/general"
 import { languageOptions } from "../../constants/languageOptions";
 
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Alert, AlertTitle, Box,Button,Stack, Typography } from "@mui/material";
 import { defineTheme } from "../../lib/defineTheme";
 import useKeyPress from "../../hooks/useKeyPress";
 import OutputWindow from "./OutputWindow";
-//import CustomInput from "./CustomInput";
 import OutputDetails from "./OutputDetails";
 import LanguagesDropdown from "./LanguagesDropdown";
-import { getAlgorithmic } from "../../services/questions.service";
-import { useParams } from "react-router-dom";
 import ThemeDropdown from "./ThemeDropdown";
 import { createSubmission } from "../../services/submission.service";
 const QuestionPrompt = (props) => {
@@ -26,11 +23,11 @@ const QuestionPrompt = (props) => {
   const [code, setCode] = useState("");
   const enterPress = useKeyPress("Enter");
   const ctrlPress = useKeyPress("Control");
-  const params = useParams();
   const [isSolved,setIsSolved] = useState("");
-  const {problem} = props;
+  const {problem,event,eventID} = props;
   const [open,setOpen] = useState(false);
 
+  
   const handleOpen = () =>{
     setOpen(true);
   }
@@ -120,40 +117,53 @@ const QuestionPrompt = (props) => {
         "X-RapidAPI-Key": "17b3cb1548msha7edecb8275e1b4p11de52jsne0449cbaa266",
       },
     };
+  
     try {
       let response = await axios.request(options);
       let statusId = response.data.status?.id;
-
+  
       // Processed - we have a result
       if (statusId === 1 || statusId === 2) {
         // still processing
         setTimeout(() => {
           checkStatus(token);
         }, 2000);
-        return;
       } else {
         setProcessing(false);
         setOutputDetails(response.data);
         showSuccessToast(`Compiled Successfully!`);
-        console.log("response.data", response.data);
-
+  
         const formData = new FormData();
-        formData.append('code',code);
-        formData.append('status',response.data.status?.description);
-        formData.append('challenge',params.challengeID);
-        formData.append('question',params.challengeID);
-        formData.append('points',problem.algorithmic.points);
-        formData.append('type','Algorithmic');
-        formData.append('language',language.name);
+        formData.append('code', code);
+        formData.append('status', response.data.status?.description);
+        formData.append('questionID', problem.algorithmic._id);
+        formData.append('problemType', 'Algorithmic');
+        formData.append('event', event);
+        formData.append('eventID', eventID);
+        formData.append('language', language.name);
+        formData.append('points', problem.algorithmic.points);
+        createSubmission(formData)
+          .then((res) => {
+            console.log("response from submission: " + res);
+            toast.success(res.data.message, {
+              position: toast.POSITION.TOP_RIGHT,
+              className: 'toast--info',
+              progressClassName: 'toast__progress--info',
+            });
+          })
+          .catch((err) => {
 
-        await createSubmission(formData).then((res) => {
-          console.log(res);
-          setIsSolved(res.data.message)
-        }).catch((err) => {
-          console.log(err);
-        })
-
-        return;
+            let error = err.response ? err.response.data : err;
+            let status = err.response.status;
+            if(status === 400){
+              toast.info(error.message, {
+                position: toast.POSITION.TOP_RIGHT,
+                className: 'toast--default',
+                progressClassName: 'toast__progress--danger',
+              });
+            }
+            
+          });
       }
     } catch (err) {
       console.log("err", err);
@@ -161,7 +171,7 @@ const QuestionPrompt = (props) => {
       showErrorToast();
     }
   };
-
+  
   function handleThemeChange(th) {
     const theme = th;
     console.log("theme...", theme);
@@ -202,52 +212,55 @@ const QuestionPrompt = (props) => {
   };
 
   return (
-    <>
     
-    <Box display="flex" backgroundColor='background.default'>
+    <>
+    {problem && (
+      <Box display="flex" backgroundColor='background.default'>
 
-        <Box width='45%'
+      <Box width='45%'
+      
+    display='flex' flexDirection='column' justifyContent='center' alignItems='space-between'>
+      
+        <Typography variant="h2" textAlign='center' mt={2}></Typography>
+        <Box sx={{lineHeight:'3'}} p={4}>
+          {problem ? 
+          <div dangerouslySetInnerHTML={{ __html: problem.algorithmic.description }} />  
+          : <p>loading...</p>}
         
-      display='flex' flexDirection='column' justifyContent='center' alignItems='space-between'>
-        
-          <Typography variant="h2" textAlign='center' mt={2}></Typography>
-          <Box sx={{lineHeight:'3'}} p={4}>
-            {problem ? 
-            <div dangerouslySetInnerHTML={{ __html: problem.algorithmic.description }} />  
-            : <p>loading...</p>}
-          
-          </Box>
         </Box>
-        <Box width="55%" sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-  <Box display="flex" flexDirection="row">
-    <LanguagesDropdown onSelectChange={onSelectChange} />
-    <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
-  </Box>
-  <Box sx={{ flex: 1 }}>
+      </Box>
+      <Box width="55%" sx={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+<Box display="flex" flexDirection="row">
+  <LanguagesDropdown onSelectChange={onSelectChange} />
+  <ThemeDropdown handleThemeChange={handleThemeChange} theme={theme} />
+</Box>
+<Box sx={{ flex: 1 }}>
 
-    <CodeEditorWindow
-      code={code}
-      onChange={onChange}
-      language={language?.value}
-      theme={theme?.value}
-    />
-  </Box>
-  <Box>
-    <Button
-      onClick={handleCompile}
-      variant="contained"
-      disabled={!code}
-      sx={{ float: "right" }}
-      width="30%"
-    >
-      COMPILE & RUN
-    </Button>
-    {outputDetails && <OutputWindow outputDetails={outputDetails} open={open} handleClose={handleClose}/>}
+  <CodeEditorWindow
+    code={code}
+    onChange={onChange}
+    language={language?.value}
+    theme={theme?.value}
+  />
+</Box>
+<Box>
+  <Button
+    onClick={handleCompile}
+    variant="contained"
+    disabled={!code}
+    sx={{ float: "right" }}
+    width="30%"
+  >
+    COMPILE & RUN
+  </Button>
+  {outputDetails && <OutputWindow outputDetails={outputDetails} open={open} handleClose={handleClose}/>}
+</Box>
+
+</Box>
   </Box>
   
-</Box>
-    </Box>
-    </>
+    )}
+  </>  
   )
 }
 
