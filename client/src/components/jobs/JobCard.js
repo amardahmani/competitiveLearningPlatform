@@ -4,9 +4,9 @@ import image from '../../assets/image.png'
 
 import { useNavigate } from 'react-router-dom';
 const JobCard = (props) => {
-    const {title,duration,jobID,description,country,poster} = props;
+    const {title,duration,jobID,description,country,poster,job} = props;
     const data = {title,duration,description,jobID,country}
-    const fileUrl = `http://localhost:3001/uploads/poster/${image}`;
+    const fileUrl = `http://localhost:3001/uploads/poster/${poster}`;
 
     const [hover, setHover] = useState(false);
     const navigate = useNavigate();
@@ -20,7 +20,7 @@ const JobCard = (props) => {
 
     
     const handleClick = () => {
-      navigate(jobID,{state:{title:title,duration:duration,jobID:jobID,description:description,country:country}});
+      navigate(jobID,{state:{job:job }});
     }
 
   return (

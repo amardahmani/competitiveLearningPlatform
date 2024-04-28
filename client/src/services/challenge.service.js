@@ -90,7 +90,7 @@ export const removeInstructor = (challengeID, instructorID) => {
 };
 
 
-export const dropAlgorithmic = (challengeID, questionID) => {
+export const dropAlgorithmicChallenge = (challengeID, questionID) => {
   return axios.delete(API_URL+'/'+challengeID+'/'+questionID,{
     headers: {
       'Content-Type': 'application/json',

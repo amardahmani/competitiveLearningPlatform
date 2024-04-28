@@ -1,11 +1,12 @@
 import { Box, Button, Card, CardContent, Dialog, DialogContent, DialogTitle, Divider, TextField, Typography } from '@mui/material';
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useDropzone } from 'react-dropzone';
 import { updateJob } from '../../services/job.service';
 import { toast } from 'react-toastify';
+import { JobsContext } from '../../hooks/JobsContext';
 
 const editorConfig = {
     placeholder: 'Enter your description here',
@@ -30,7 +31,7 @@ const EditJob = (props) => {
     const {open,handleClose,job} = props;
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
 
-
+    const {updateJobsState} = useContext(JobsContext);
     
     const [values, setValues] = useState({
         description: '',
@@ -57,8 +58,8 @@ const EditJob = (props) => {
         formData.append('poster', acceptedFiles[0]);
       }
       
-      updateJob(job.jobID,formData).then((response) => {
-        
+      updateJob(job.job._id,formData).then((response) => {
+        updateJobsState(response.data);
         toast.success('Your changes have been saved successfully!', {
           position: toast.POSITION.TOP_RIGHT,
           className: 'toast--success',
@@ -70,16 +71,15 @@ const EditJob = (props) => {
       })
     }
 
-      useEffect(() => {
-        if (job) {
-            setValues({
-                description: job.description || '',
-                country: job.country || '',
-                title: job.title || '',
-                duration: job.duration || ''
-            });
-            
-        }
+    useEffect(() => {
+      if (job.job) {
+        setValues({
+          description: job.job.description || '',
+          country: job.job.country || '',
+          title: job.job.title || '',
+          duration: job.job.duration || ''
+        });
+      }
     }, [job]);
   return (
     <Dialog open={open} onClose={handleClose} sx={{
@@ -117,6 +117,7 @@ const EditJob = (props) => {
             <TextField
               name="duration"
               id="duration"
+              type='number'
               label="duration"
               variant="outlined"
               value={values.duration}

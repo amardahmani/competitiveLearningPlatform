@@ -3,7 +3,7 @@ import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 const DropAlgorithmic = (props) => {
 
-    const {setAlgorithmicQuestions,eventID,questionID,handleDropAlgorithmic} = props;
+    const {eventID,questionID,handleDropAlgorithmic} = props;
 
   return (
     <Box>

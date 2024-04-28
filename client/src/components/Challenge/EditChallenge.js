@@ -30,7 +30,6 @@ const EditChallenge = (props) => {
     const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
     const {open,handleClose,challenge,updateChallenges} = props;
 
-    console.log("challenge in edit: " + challenge.title + " " + challenge.description + " " + challenge.duration);
     const [values, setValues] = useState({
       description: '',
       title:'',

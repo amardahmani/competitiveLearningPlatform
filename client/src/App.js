@@ -33,6 +33,7 @@ import ModuleDetail from './pages/Developer/views/ModuleDetail';
 import ProblemSetChallenge from './pages/Developer/views/Events/challenge/ProblemSetChallenge';
 import ProblemPromptChallenge from './pages/Developer/views/Events/challenge/ProblemPromptChallenge';
 import ProblemPromptPath from './pages/Developer/views/Events/path/ProblemPromptPath';
+import ProfileDeveloper from './pages/Developer/views/Profile';
 
 
 
@@ -58,6 +59,7 @@ function App () {
           
           <Route path="/developer/" element={<DeveloperBoard />} >
           <Route path="/developer/dashboard" element={<Home />} />
+          <Route path="/developer/profile" element={<ProfileDeveloper />} />
           <Route path="/developer/compete" element={<Compete />} />
           <Route path="/developer/compete/:challengeID" element={<Competition />} />
           <Route path="/developer/compete/:challengeID/problemset" element={<ProblemSetChallenge />} />

@@ -17,7 +17,7 @@ const jobSchema = mongoose.Schema({
         type: String
     },
     duration:{
-        type:String
+        type:Number
     },
     creator: {type:mongoose.Schema.Types.ObjectId, ref:'User'},
     algorithmicQuestions: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Algorithmic' }],

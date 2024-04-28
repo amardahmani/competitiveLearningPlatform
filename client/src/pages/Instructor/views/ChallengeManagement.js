@@ -18,7 +18,6 @@ const ChallengeManagementInstructor = () => {
   };
 
   return (
-    <ChallengesProvider>
     <Box>
       <Button onClick={handleOpen} variant='contained' sx={{ marginLeft: "20px" }}>New Challenge</Button>
       <Box mt={4} display='flex' flexDirection="row">
@@ -42,7 +41,6 @@ const ChallengeManagementInstructor = () => {
         </Grid>
       </Box>
     </Box>
-    </ChallengesProvider>
   );
 };
 

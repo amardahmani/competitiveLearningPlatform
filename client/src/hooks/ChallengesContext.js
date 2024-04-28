@@ -4,7 +4,8 @@ import { getChallengesUser } from '../services/challenge.service';
 export const ChallengesContext = createContext({ 
   challenges: null,
   deleteChallengeClient: () => {},
-  updateChallenges: () => {} 
+  updateChallenges: () => {} ,
+  pushChallenge: () => {}
 
 }); 
 
@@ -33,9 +34,12 @@ const ChallengesProvider = ({ children }) => {
     setChallenges(challenges.map(challenge => challenge._id === updatedChallenge._id? updatedChallenge : challenge));
   }
 
+  const pushChallenge = (challenge) => {
+    setChallenges([...challenges,challenge]);
+  }
   // Render children only when challenges are loaded
   return challenges !== null ? (
-    <ChallengesContext.Provider value={{ challenges,deleteChallengeClient,updateChallenges }}>
+    <ChallengesContext.Provider value={{ challenges,deleteChallengeClient,updateChallenges,pushChallenge }}>
       {children}
     </ChallengesContext.Provider>
   ) : null;

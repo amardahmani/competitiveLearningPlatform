@@ -55,9 +55,9 @@ export const createJob = async (req, res) => {
 
   export const deleteJob = async (req, res) => {
     try {
-      const jobId = req.params.id;
-  
-      const deletedJob = await Job.findByIdAndDelete(jobId);
+      const jobID = req.params.jobID;
+      
+      const deletedJob = await Job.findByIdAndDelete(jobID);
   
       if (!deletedJob) {
         return res.status(404).json({ error: 'Job not found' });
@@ -110,7 +110,33 @@ export const createJob = async (req, res) => {
       }
     }
   
-
+    export const dropAlgorithmicJob = async (req, res) => {
+      const { jobID,questionID } = req.params;
+      console.log(jobID);
+      try {
+        const job = await Job.findOne({ _id: jobID });
+        const algorithmic = await Algorithmic.findOne({ _id: questionID });
+    
+        if (!job) {
+          return res.status(404).send({ message: "Job not found" });
+        }
+    
+        if (!algorithmic) {
+          return res.status(404).send({ message: "Algorithmic question not found" });
+        }
+    
+        const index = job.algorithmicQuestions.indexOf(questionID);
+        if (index === -1) {
+          return res.status(404).send({ message: "Algorithmic question not found in Job" });
+        }
+    
+        job.algorithmicQuestions.splice(index, 1);
+        await job.save();
+        res.status(200).send({ message: "Algorithmic question dropped successfully" });
+      } catch (err) {
+        res.status(500).send({ message: err.message });
+      }
+    }
 
   export const getJobsPlanned = async (req,res) => {
     try {
@@ -142,15 +168,16 @@ export const createJob = async (req, res) => {
   
   export const updateJob = async (req, res) => {
     const jobId = req.params.jobID;
-    const { title, description, country, positions } = req.body;
+    const { title, description, country, duration } = req.body;
     const poster = req.file;
+
   
     try {
       const updatedFields = {
         title,
         description,
         country,
-        positions,
+        duration,
       };
   
       if (poster) {

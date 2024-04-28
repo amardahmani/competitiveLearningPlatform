@@ -1,17 +1,13 @@
 import { Box, Button, Card, CardContent, Typography } from '@mui/material'
 import ListAlgorithmic from '../../../components/questions/algorithmic/ListAlgorithmic'
-import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD'
-import ProblemSetters from '../../../components/Challenge/ProblemSetters'
 import { useLocation, useParams } from 'react-router-dom'
-import { dropAlgorithmic, getChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../../../services/challenge.service'
-import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
+import {dropAlgorithmicChallenge, getChallengeQuestions, getInstructors, getNonInstructors, pushAlgorithmicChallenge, pushInstructor, removeInstructor } from '../../../services/challenge.service'
 import Instructors from '../../../components/tables/Instructors'
 import AddInstructorDialog from '../../../components/users/AddInstructorDialog'
 
 import QuestionLibrary from '../../../components/questions/algorithmic/QuestionLibrary'
 import UpdateDeleteCard from '../../../components/Challenge/cards/UpdateDeleteCard'
-import { createAlgorithmic } from '../../../services/questions.service'
-import { getCurrentUser } from '../../../services/auth.service'
+
 import { useContext, useEffect, useState } from 'react'
 import DropAlgorithmic from '../../../components/questions/algorithmic/Buttons/DropAlgorithmic'
 import { toast } from 'react-toastify'
@@ -81,7 +77,7 @@ const ChallengeDetail = (props) => {
   };
 
   const handleDropAlgorithmic = (challengeID,questionID) => {
-    dropAlgorithmic(challengeID,questionID).then((response) => {
+    dropAlgorithmicChallenge(challengeID,questionID).then((response) => {
       toast(response.data.message, {
         type: 'success',
         autoClose: true,

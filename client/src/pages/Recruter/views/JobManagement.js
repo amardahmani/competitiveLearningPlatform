@@ -1,16 +1,17 @@
 import { Box, Dialog, DialogContent, DialogTitle,Button, Grid } from '@mui/material'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import CreateJob from '../../../components/jobs/CreateJob';
 import { getJobsRecruiter } from '../../../services/job.service';
 import ChallengeCardUD from '../../../components/Challenge/ChallengeCardUD';
 import JobCard from '../../../components/jobs/JobCard';
+import { JobsContext } from '../../../hooks/JobsContext';
 
 
 const JobManagement = () => {
 
-    const [jobs,setJobs] = useState([]);
-    const [open,setOpen] = useState(false);
+    const {jobs} = useContext(JobsContext);
 
+    const [open,setOpen] = useState(false);
     const handleOpen = () => {
         setOpen(true);
     }
@@ -19,22 +20,12 @@ const JobManagement = () => {
         setOpen(false);
     }
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try{
-                const response = await getJobsRecruiter();
-                console.log(response.data);
-                setJobs(response.data);
-            }catch(err){
-                console.log(err)
-            }
-        };
-        fetchData()
-    },[])
+    
   return (
+    
     <Box>
         <Button onClick={handleOpen} variant='contained' sx={{marginLeft:"20px"}}>new Job offer</Button>
-        <CreateJob open={open} handleClose={handleClose} jobs={jobs} setJobs={setJobs}/>
+        <CreateJob open={open} handleClose={handleClose} jobs={jobs} />
 
         <Box mt={4} display='flex' flexDirection="row">
           <Grid container spacing={1}>
@@ -42,6 +33,7 @@ const JobManagement = () => {
         {jobs && jobs.map((job) => (
           <Grid item md={4} xs={12}>
           <JobCard 
+          job={job}
           key={job._id}
           title={job.title}
           description={job.description}
@@ -54,6 +46,7 @@ const JobManagement = () => {
         </Grid>
       </Box>
     </Box>
+    
   )
 }
 

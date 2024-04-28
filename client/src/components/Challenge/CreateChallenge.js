@@ -1,6 +1,6 @@
 import { Box, Button, FormControl, InputLabel, MenuItem, Select, TextField, Typography,Dialog,DialogTitle,DialogContent, Divider } from '@mui/material'
 import { Formik } from 'formik'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import MyUploadAdapter from '../../utils/MyUploadAdapter';
@@ -11,6 +11,7 @@ import FlexBetween from '../../lib/displays/FlexBetween';
 import EditIcon from '@mui/icons-material/Edit';
 import { getCurrentUser } from '../../services/auth.service';
 import { createChallenge } from '../../services/challenge.service';
+import { ChallengesContext } from '../../hooks/ChallengesContext';
 
 
 const createChallengeSchema = yup.object().shape({
@@ -31,6 +32,7 @@ const initialValuesCreate = {
 
 const CreateChallenge = (props) => {
   const {setChallenges,open,handleClose} = props;
+  const {pushChallenge} = useContext(ChallengesContext);
   const user = getCurrentUser();
   const editorRef = useRef();
   const editorConfig = {
@@ -61,9 +63,8 @@ const CreateChallenge = (props) => {
     formData.append('duration',values.duration);
     formData.append('poster',values.poster);
     createChallenge(formData).then((response) => {
-        let challenge = {title:response.data.challenge.title,description:response.data.challenge.description,_id:response.data.challenge._id}
-        setChallenges(prevArray => [...prevArray, challenge]);
-        console.log(response.data.challenge);
+        let challenge = response.data.challenge;
+        pushChallenge(challenge);
         toast.success('the challenge has been created Successfully', {
           position: toast.POSITION.TOP_RIGHT,
           className: 'toast--success',
@@ -83,7 +84,7 @@ const CreateChallenge = (props) => {
 
     <Dialog open={open} onClose={handleClose}>
     <DialogTitle>
-      <Typography variant='h3'>Create a new challenge</Typography>
+      <Typography variant='h3' align='center' color='primary'>Create a new challenge</Typography>
     </DialogTitle>
     <Divider />
     <DialogContent>

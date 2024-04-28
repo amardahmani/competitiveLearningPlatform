@@ -11,6 +11,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import CallIcon from '@mui/icons-material/Call';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import WorkIcon from '@mui/icons-material/Work';
+import JobsProvider from '../../hooks/JobsContext'
 
 const RecruiterBoard = () => {
   const [isSidebarOpen, setSidebarOpen] = useState(true);
@@ -81,7 +82,9 @@ const RecruiterBoard = () => {
           paddingLeft: isSidebarOpen && lgUp ? "280px!important" : "",
         }}>
           <Box sx={{ minHeight: "calc(100vh - 170px)" }}>
+            <JobsProvider>
             <Outlet />
+            </JobsProvider>
           </Box>
         </Container>
       </Box>

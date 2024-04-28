@@ -19,6 +19,9 @@ export const getJobsUnplanned = () => {
     return axios.get(API_URL+'/unplanned')
 }
 
+export const getJobsPlanned = () => {
+  return axios.get(API_URL+'/planned');
+}
 
 export const getJobsRecruiter = () => {
     return axios.get(API_URL+'/recruiter',config);
@@ -29,7 +32,7 @@ export const getAllJobs = () => {
 }
 
 export const deleteJob = (jobID) => {
-    return axios.delete(API_URL+'/'+jobID);
+    return axios.delete(API_URL+'/'+jobID,config);
 }
 
 export const pushAlgorithmicJob = (jobID,data) => {
@@ -48,12 +51,16 @@ export const getJobInstructors = (jobID) => {
 
 export const updateJob = (jobID,job) => {
   return axios.put(API_URL+'/'+jobID,job,{headers:{
-    'Content-Type': 'application/json',
+    'Content-Type': 'multipart/form-data',
 }})
 }
 
 export const getJobNonInstructors = (jobID) => {
     return axios.get(API_URL+'/'+jobID+'/Noninstructors');
+}
+
+export const dropAlgorithmicJob = (jobID,questionID) => {
+    return axios.delete(API_URL+'/'+jobID+'/'+questionID);
 }
 
 export const pushInstructor = (challengeID, instructorID) => {

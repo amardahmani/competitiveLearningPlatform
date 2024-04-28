@@ -19,11 +19,15 @@ const ChallengePreview = (props) => {
   const [value, setValue] = React.useState('1');
   const fileUrl = `http://localhost:3001/uploads/poster/${challenge.poster}`;
   const navigate = useNavigate();
+  let currentDate = new Date();
 
+  const {startDate,endDate } = challenge;
+  console.log(challenge)
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
   
+  const isChallengeActive = currentDate >= new Date(startDate) && currentDate <= new Date(endDate);
   return (
     <Box width='100%'>
         <Box component="img" sx={{width:"100%",height:350}} src={fileUrl}>
@@ -64,13 +68,16 @@ const ChallengePreview = (props) => {
                   </Box>
                 </Box>
                 <Box display='flex' flexDirection='column' justifyContent='space-around' alignItems='center' width='20%' ml={15}>
-                  {joined ? (
-                  <Button variant='contained' fullWidth size='large'
-                  onClick={() => handleSolve({challengeID})}>Solve </Button>):(
-                    <Button variant='contained' fullWidth size='large'
-                    onClick={handleJoin}>Join</Button>
+                  
+                  {isChallengeActive ? (
+                    joined ? (
+                      <Button variant='contained' fullWidth size='large' onClick={() => handleSolve({ challengeID })}>Solve</Button>
+                    ) : (
+                      <Button variant='contained' fullWidth size='large' onClick={handleJoin}>Join</Button>
+                    )
+                  ) : (
+                    <Button variant='contained' fullWidth size='large' disabled>Challenge Not Active</Button>
                   )}
-                  <Button variant='outlined' fullWidth size='large'>leaderBoard</Button>
                 </Box>
               </CardContent>
             </Card>

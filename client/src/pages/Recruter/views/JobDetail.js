@@ -9,9 +9,11 @@ import CardUD from '../../../components/jobs/CardUD'
 import CreateAlgorithmic from '../../../components/questions/algorithmic/CreateAlgorithmic'
 import { createAlgorithmic } from '../../../services/questions.service'
 import { getCurrentUser } from '../../../services/auth.service'
-import { getJobAlgorithmicProblems, getJobInstructors, getJobNonInstructors, pushAlgorithmicJob, pushInstructor, removeInstructor } from '../../../services/job.service'
+import { dropAlgorithmicJob, getJobAlgorithmicProblems, getJobInstructors, getJobNonInstructors, pushAlgorithmicJob, pushInstructor, removeInstructor } from '../../../services/job.service'
 import AddInstructorDialog from '../../../components/users/AddInstructorDialog'
 import QuestionLibrary from '../../../components/questions/algorithmic/QuestionLibrary'
+import DropAlgorithmic from '../../../components/questions/algorithmic/Buttons/DropAlgorithmic'
+import { toast } from 'react-toastify'
 const JobDetail = (props) => {
   const user = getCurrentUser();
   const id = user.id;
@@ -25,8 +27,8 @@ const JobDetail = (props) => {
   const jobID = params.jobID;
   const [algorithmicQuestions,setAlgorithmicQuestions] = useState([]);
   const {state} = useLocation();
-  console.log("state: "+state)
-  const [job,setJob] = useState(state);
+  const [job,setJob] = useState(state.job);
+
   const handleOpen = () => {
     setOpen(true);
   }
@@ -49,6 +51,20 @@ const JobDetail = (props) => {
 
   const handleCloseAddInstructor = () => {
     setOpenAddInstructor(false);
+  }
+
+  const handleDropAlgorithmic = (jobID,questionID) => {
+    dropAlgorithmicJob(jobID,questionID).then((response) => {
+      toast(response.data.message, {
+        type: 'success',
+        autoClose: true,
+        position: 'top-right',
+      });
+
+      setAlgorithmicQuestions((prevQuestions) =>
+        prevQuestions.filter((q) => q._id !== questionID)
+      );
+    }).catch((error) => {console.log(error)});
   }
 
   const handleSave = (instructor) => {
@@ -143,9 +159,7 @@ const JobDetail = (props) => {
         <Box sx={{display:'flex',flexDirection:"row"}}>
           
           <Box width="70%">
-            <Button variant='contained' onClick={handleOpen}
-            sx={{marginLeft:"10px",marginRight:"10px"}}>New Question</Button>
-            Or   <Button sx={{marginLeft:"10px"}} variant='outlined' onClick={handleOpenLibrary}>Import Questions</Button>
+            <Button sx={{marginLeft:"10px"}} variant='contained' onClick={handleOpenLibrary}>Import Questions</Button>
             <CreateAlgorithmic 
             open={open} 
             handleClose={handleClose}
@@ -170,9 +184,13 @@ const JobDetail = (props) => {
                       sm: "unset",
                     },
                   }}
-                  >
+                  > 
                     
                       <ListAlgorithmic  algorithmicQuestions={algorithmicQuestions}
+                      DropAlgorithmic={DropAlgorithmic}
+                      handleDropAlgorithmic={handleDropAlgorithmic}
+                      eventID={jobID}
+
                       />
                     
                     
