@@ -2,11 +2,11 @@ import React from 'react'
 import ChallengeCard from '../../../../components/Challenge/ChallengeCard'
 import { Grid, Typography } from '@mui/material'
 
-const ListChallenges = (props) => {
-    const {startPhrase,endPhrase,challenges} = props;
+const ListCompetitions = (props) => {
+    const {startPhrase,endPhrase,events} = props;
   return (
         <Grid container spacing={2}>
-            {challenges && challenges.map(challenge => (
+            {events && events.map(challenge => (
                 <Grid item md={3} xs={12}>
                     <ChallengeCard 
                     startPhrase={startPhrase}
@@ -27,4 +27,4 @@ const ListChallenges = (props) => {
   )
 }
 
-export default ListChallenges
+export default ListCompetitions;

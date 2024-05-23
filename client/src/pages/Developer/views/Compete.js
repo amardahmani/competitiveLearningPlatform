@@ -4,12 +4,13 @@ import ChallengeCard from '../../../components/Challenge/ChallengeCard'
 import { CompetitionContext } from '../../../hooks/CompetitionContext';
 import TabContext from '@mui/lab/TabContext';
 import TabPanel from '@mui/lab/TabPanel';
-import ListChallenges from './Events/ListChallenges';
 import TabList from '@mui/lab/TabList';
+import ListEvents from './Events/ListCompetitions';
+import ListCompetitions from './Events/ListCompetitions';
 
 const Compete = () => {
 
-    const {challenges} = useContext(CompetitionContext);
+    const {events} = useContext(CompetitionContext);
 
     const [value,setValue] = useState("1");
 
@@ -17,12 +18,12 @@ const Compete = () => {
         setValue(newValue);
       };
 
-    const currentDate = new Date();
+    let currentDate = new Date();
 
 
-    const currentChallenges = challenges.filter(challenge => new Date(challenge.startDate) <= currentDate && new Date(challenge.endDate) >= currentDate);
-    const upcomingChallenges = challenges.filter(challenge => new Date(challenge.startDate) > currentDate);
-    const endedChallenges = challenges.filter(challenge => new Date(challenge.endDate) < currentDate);
+    const currentEvents = events.filter(event => new Date(event.start) <= currentDate && new Date(event.end) >= currentDate);
+    const upcomingEvents = events.filter(event => new Date(event.start) > currentDate);
+    const endedEvents = events.filter(event => new Date(event.end) < currentDate);
 
 
     return (
@@ -37,15 +38,15 @@ const Compete = () => {
         </Box>
 
         <TabPanel value='1'>
-            <ListChallenges challenges={upcomingChallenges} startPhrase={"STARTS IN"}/>
+            <ListCompetitions events={upcomingEvents} startPhrase={"STARTS IN"}/>
         </TabPanel>
 
         <TabPanel value='2'>
-            <ListChallenges challenges={currentChallenges} endPhrase={"ENDS IN"}/>
+            <ListCompetitions events={currentEvents} endPhrase={"ENDS IN"}/>
         </TabPanel>
 
         <TabPanel value='3'>
-            <ListChallenges challenges={endedChallenges}/>
+            <ListCompetitions events={endedEvents}/>
         </TabPanel>
         </TabContext>
     </Box>

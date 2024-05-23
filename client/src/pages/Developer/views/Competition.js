@@ -47,10 +47,7 @@ const Competition = () => {
     setJoined(true);
   };
 
-  const handleClick = () => {
-    const challenge = getChallenge(challengeID);
-    console.log(challenge);
-  }
+ 
 
   return (
     <>

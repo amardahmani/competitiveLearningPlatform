@@ -12,10 +12,9 @@ import {
   Button,
   Typography
 } from '@mui/material';
-import Dropzone,{useDropzone} from 'react-dropzone';
+import {useDropzone} from 'react-dropzone';
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { deleteModule, updateModule } from '../../services/module.service';
-import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 

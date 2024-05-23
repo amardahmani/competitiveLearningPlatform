@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, Card, CardContent, CardMedia, Grid, Typography } from '@mui/material';
-import { getCurrentUser } from '../../services/auth.service';
-import { joinAlgorithmic } from '../../services/challenge.service';
 import { useNavigate } from 'react-router-dom';
 import formatTime from '../../utils/TimeFormatter';
 

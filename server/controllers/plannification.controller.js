@@ -39,7 +39,6 @@ export const createPlannification = async (req,res) => {
 export const getPlannedEventsCalendar = async (req,res) => {
   try {
     const plannedEvents = await Plannification.find().populate('event');
-    console.log(plannedEvents);
     if(!plannedEvents){
       return res.status(404).send({message:"no event found"})
     }
@@ -55,4 +54,35 @@ export const getPlannedEventsCalendar = async (req,res) => {
     console.error(err);
     res.status(500).json({ error: 'An error occurred while retrieving planned events.' });
   }
+}
+
+export const getPlannedCompetitions = async (req, res) => {
+  try {
+    const plannedEvents = await Plannification.find().populate('event');
+    if(!plannedEvents){
+      return res.status(404).send({message:"no event found"})
+    }
+    const formattedEvents = plannedEvents.map(plannification => ({
+      id: plannification._id,
+      event: plannification.event._id,
+      type: plannification.type,
+      title: plannification.event.title,
+      poster: plannification.event.poster,
+      participants: plannification.event.participants,
+      description:plannification.event.description,
+      start: plannification.startDate,
+      end: plannification.endDate
+    }));
+
+    res.status(200).send(formattedEvents);
+  }
+
+  catch(err){
+    console.error(err);
+    res.status(500).json({ error: 'An error occurred while retrieving planned events.' });
+  }
+  
+
+
+
 }

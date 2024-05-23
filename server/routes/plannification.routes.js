@@ -1,9 +1,10 @@
 import express from 'express';
 
-import { createPlannification, getPlannedEventsCalendar,  } from '../controllers/plannification.controller.js';
+import { createPlannification, getPlannedCompetitions, getPlannedEventsCalendar  } from '../controllers/plannification.controller.js';
 
 const router = express.Router();
 
 router.post('',createPlannification);
 router.get('',getPlannedEventsCalendar);
+router.get('/competitions',getPlannedCompetitions)
 export default router;

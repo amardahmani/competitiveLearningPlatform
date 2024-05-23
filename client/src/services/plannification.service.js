@@ -14,3 +14,7 @@ export const planEvent = (plan) => {
 export const getPlannedEvents = () => {
     return axios.get(API_URL)
 }
+
+export const getPlannedCompetitions = () => {
+    return axios.get(API_URL + '/competitions');
+}
